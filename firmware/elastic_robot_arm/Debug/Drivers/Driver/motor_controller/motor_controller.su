@@ -1,0 +1,5 @@
+motor_controller.c:58:6:InitMotorController	8	static
+motor_controller.c:68:6:MotorSetDutyCycle	48	static
+motor_controller.c:94:6:MotorReadEncoder	48	static
+motor_controller.c:119:20:MX_TIM1_Init	80	static
+motor_controller.c:173:20:MX_TIM3_Init	56	static

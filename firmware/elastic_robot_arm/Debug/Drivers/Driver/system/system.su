@@ -1,0 +1,11 @@
+system.c:77:6:InitSystem	8	static
+system.c:119:6:SystemStateMachineProcessing	128	static
+system.c:192:20:InitSystemTimer	8	static
+system.c:197:20:InitSystemDMA	8	static
+system.c:202:20:InitSystemGPIO	8	static
+system.c:212:6:SystemClockConfig	88	static
+system.c:263:20:MX_DMA_Init	16	static
+system.c:282:20:SystemStartTimer	8	static
+system.c:292:20:MX_TIM2_Init	32	static
+system.c:325:20:MX_GPIO_Init	48	static
+system.c:357:6:HAL_TIM_PeriodElapsedCallback	16	static

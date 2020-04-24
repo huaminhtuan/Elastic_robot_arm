@@ -1,6 +1,1 @@
-*.i
-*.ii
-*.gpu
-*.ptx
-*.cubin
-*.fatbin
+BLDC_motor/materials/
