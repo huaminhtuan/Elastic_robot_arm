@@ -1,7 +1,0 @@
-Removed Pin From Net: NetName=AGND Pin=R2-2
-Change Component Footprint: Designator=R2 Old Footprint=AXIAL-0.3 New Footprint=R_0603
-Added Pin To Net: NetName=AGND Pin=R2-1
-Added Pin To Net: NetName=NetR2_2 Pin=R2-2
-Added Pin To Net: NetName=NetR2_2 Pin=U1-7
-Added Net: Name=NetR2_2
-Added Room: Name=Driver

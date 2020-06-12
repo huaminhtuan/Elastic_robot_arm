@@ -1,6 +1,0 @@
-function [V_control, theta_m_d, phi_k, theta_r_k]  = controller(theta_l, theta_l_dot, theta_m, theta_m_dot,... 
-                                               e_l_k, e_l_k_1, theta_m_d_k_1, phi_k_1, theta_r_k_1)
-
-    theta_m_d = Fuzzy(e_l_k, e_l_k_1, theta_m_d_k_1);
-    [V_control, phi_k, theta_r_k] = MRAC(theta_l, theta_l_dot, theta_m, theta_m_dot,... 
-                      theta_m_d, phi_k_1, theta_r_k_1);
