@@ -107,14 +107,22 @@ M = simplify(ml0*(Jvl0'*Jvl0) + ml1*(Jvl1'*Jvl1) +...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Centrifugal and Coriolis Forces
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-syms C
+syms C_temp
 for k = 1:num_of_joints
     for j = 1:num_of_joints
         for i = 1:num_of_joints
-            C(i,j,k) = 0.5*(simplify(diff(M(k,j), q(i))) + ...
-                       simplify(diff(M(k,i), q(j))) - ...
-                       simplify(diff(M(i,j), q(k))));
+            C_temp(i,j,k) = 0.5*(simplify(diff(M(i,j), q(k))) + ...
+                                 simplify(diff(M(i,k), q(j))) - ...
+                                 simplify(diff(M(j,k), q(i))));
         end
     end
+end
+
+for i = 1:num_of_joints
+	for j = 1:num_of_joints
+        for k = 1:num_of_joints
+            C(i,j) = C_temp(i,j,k)*qdot(k);
+        end
+	end
 end
 

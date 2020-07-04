@@ -8,8 +8,8 @@ clc
 l0 = 0.3;
 l1 = 0.3;
 % Link and motor mass
-ml0 = 7.2;
-ml1 = 3.2;
+ml0 = 6;
+ml1 = 4;
 mm0 = 1;
 mm1 = 1;
 % Link and motor inertia
@@ -29,12 +29,11 @@ Dl1 = 0.2;
 % Gravitational constant
 g = 9.81;
 % String stiffness and damping coefficient
-K0 = 1200;
-K1 = 1440;
+K0 = 1500;
+K1 = 1200;
 % Gear ratio
 N0 = 10;
 N1 = 10;
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Dynamic matrices
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -53,9 +52,11 @@ M = [Ilzz0 + Ilzz1 + (l1^2*ml1)/4 - (l1^2*ml1*sin(q1)^2)/4   0
      0                                                       Ilyy1 + (l1^2*ml1)/4 + Ilxx1*sin(q0)^2 - Ilyy1*sin(q0)^2];
 
 % Centrifugal and Coriolis forces
-C = zeros(2,1);
-C(1,1) = - qdot1*((ml1*qdot0*sin(2*q1)*l1^2)/8 + (qdot1*sin(2*q0)*(Ilxx1 - Ilyy1))/2) - (l1^2*ml1*qdot0*qdot1*sin(2*q1))/8;
-C(2,1) = (l1^2*ml1*qdot0^2*sin(2*q1))/8 + Ilxx1*qdot0*qdot1*sin(2*q0) - Ilyy1*qdot0*qdot1*sin(2*q0);
+C = zeros(2,2);
+C(1,1) = -(l1^2*ml1*qdot1*sin(2*q1))/8;
+C(1,2) = -(qdot1*sin(2*q0)*(Ilxx1 - Ilyy1))/2;
+C(2,1) = (qdot1*sin(2*q0)*(Ilxx1 - Ilyy1))/2;
+C(2,2) = 0;
 
 % Gravitational forces
 G = zeros(2,1);
@@ -68,14 +69,14 @@ G(2,1) = ml1*g*(l1/2)*cos(q1);
 % Note that the performance level is determined by gamma and weighting matrix H
 % and that the control-input energy can be adjusted by matrix D.
 gamma = 0.01;
-H = [0.1 0   
-     0   0.1
+H = [2 0   
+     0   2
      0   0
      0   0];
 D = [0 0
      0 0
-     3 0
-     0 3];
+     1.5 0
+     0 1.5];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Solving LMI

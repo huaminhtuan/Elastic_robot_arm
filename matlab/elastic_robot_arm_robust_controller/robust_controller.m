@@ -18,8 +18,8 @@ function [theta_d, q_r_dot_k, integral] = robust_controller(q_d, q_d_prev, q, qd
     l0 = 0.3;
     l1 = 0.3;
     % Link and motor mass
-    ml0 = 7.2;
-    ml1 = 3.2;
+    ml0 = 6;
+    ml1 = 4;
     mm0 = 1;
     mm1 = 1;
     % Link and motor inertia
@@ -39,8 +39,8 @@ function [theta_d, q_r_dot_k, integral] = robust_controller(q_d, q_d_prev, q, qd
     % Gravitational constant
     g = 9.81;
     % String stiffness and damping coefficient
-    K0 = 1200;
-    K1 = 1440;
+    K0 = 1500;
+    K1 = 1200;
     % Gear ratio
     N0 = 10;
     N1 = 10;
@@ -52,26 +52,28 @@ function [theta_d, q_r_dot_k, integral] = robust_controller(q_d, q_d_prev, q, qd
     q1 = q(2);
     qdot0 = qdot(1);
     qdot1 = qdot(2);
-    Kp = 12;
-    Ki = 5;
+    Kp = 10;
+    Ki = 7;
     K_hat = [K0 0
              0  K1];
     M_hat = [Ilzz0 + Ilzz1 + (l1^2*ml1)/4 - (l1^2*ml1*sin(q1)^2)/4  0
              0,                                                     Ilyy1 + (l1^2*ml1)/4 + Ilxx1*sin(q0)^2 - Ilyy1*sin(q0)^2];
-    C_hat = zeros(2,1);
-    C_hat(1,1) = - qdot1*((ml1*qdot0*sin(2*q1)*l1^2)/8 + (qdot1*sin(2*q0)*(Ilxx1 - Ilyy1))/2) - (l1^2*ml1*qdot0*qdot1*sin(2*q1))/8;
-    C_hat(2,1) = (l1^2*ml1*qdot0^2*sin(2*q1))/8 + Ilxx1*qdot0*qdot1*sin(2*q0) - Ilyy1*qdot0*qdot1*sin(2*q0);
+    C_hat = zeros(2,2);
+    C_hat(1,1) = -(l1^2*ml1*qdot1*sin(2*q1))/8;
+    C_hat(1,2) = -(qdot1*sin(2*q0)*(Ilxx1 - Ilyy1))/2;
+    C_hat(2,1) = (qdot1*sin(2*q0)*(Ilxx1 - Ilyy1))/2;
+    C_hat(2,2) = 0;
     
     G_hat = zeros(2,1);
     G_hat(1,1) = 0;
     G_hat(2,1) = ml1*g*(l1/2)*cos(q1);
 
-    P = 1.0e-03*[0.1817 0
-                 0      0.0438];
+    P = 1.0e-04*[0.6705         0
+         0    0.2758];
     D = [0 0
          0 0
-         3 0
-         0 3];
+         1.5 0
+         0 1.5];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%% Calculate reference signal %%%%
@@ -83,7 +85,7 @@ function [theta_d, q_r_dot_k, integral] = robust_controller(q_d, q_d_prev, q, qd
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%% Calculate control input ut %%%%
-    ut = inv(K_hat)*(M_hat*q_r_dotdot_k + C_hat + G_hat) + q;
+    ut = inv(K_hat)*(M_hat*q_r_dotdot_k + C_hat*q_r_dot_k + G_hat) + q;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%% Calculate new state %%%%%%%%
