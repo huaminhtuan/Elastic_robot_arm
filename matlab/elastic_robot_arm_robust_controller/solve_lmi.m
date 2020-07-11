@@ -38,10 +38,10 @@ N1 = 10;
 % Dynamic matrices
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Joint angles and velocity
-q0 = 0;
-q1 = 0;
-qdot0 = 0;
-qdot1 = 0;
+q0 = pi;
+q1 = pi;
+qdot0 = pi/3;
+qdot1 = pi/3;
 
 % String stiffness
 K = [K0 0
@@ -69,14 +69,14 @@ G(2,1) = ml1*g*(l1/2)*cos(q1);
 % Note that the performance level is determined by gamma and weighting matrix H
 % and that the control-input energy can be adjusted by matrix D.
 gamma = 0.01;
-H = [2 0   
-     0   2
-     0   0
-     0   0];
+H = [0.1 0   
+     0 0.1
+     0 0
+     0 0];
 D = [0 0
      0 0
-     1.5 0
-     0 1.5];
+     1 0
+     0 1];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Solving LMI

@@ -12,7 +12,7 @@ function theta_d = fuzzy(e_l_k, e_l_k_1, theta_d_k_1)
         && isa(theta_d_k_1,'double'));
 %%%%%%%%%% Local variable %%%%%%%%%%
     Kp = 5;
-    Kd = 1;
+    Kd = 0.1;
     Ku = 1;
     T = 0.001;
     theta_d_upper_limit = pi;

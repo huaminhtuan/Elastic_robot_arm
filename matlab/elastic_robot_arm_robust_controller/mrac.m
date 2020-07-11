@@ -9,7 +9,7 @@
 % Input theta_r_k_1 : Prior reference model state variables
 % Output tau_m   : Control torque
 % Output phi_k   : Current estimated system parameters
-% Output theta_r : Current reference model state variables
+% Output theta_r : Current reference model  state variables
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [V_control, phi_k, theta_r]  = mrac(theta_l, theta_l_dot, theta_m, theta_m_dot,... 
                       theta_m_d, phi_k_1, theta_r_k_1)
@@ -20,7 +20,9 @@ function [V_control, phi_k, theta_r]  = mrac(theta_l, theta_l_dot, theta_m, thet
     assert(all(size(phi_k_1) == [5 1]));
     assert(all(size(theta_r_k_1) == [2 1]));
 %%%%%%%%%% Local variable %%%%%%%%%%
-    gamma = 0.98; % Learning rate coefficient
+    gamma = 0.995; % Learning rate coefficient
+    % lon --> cham thich nghi, it gai
+    % nho --> tn nhanh, co the nhieu
     Kv = 20;
     N = 10; % Gear ratio
     T = 0.001; % Sampling period
@@ -36,11 +38,11 @@ function [V_control, phi_k, theta_r]  = mrac(theta_l, theta_l_dot, theta_m, thet
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%% Reference Model %%%%%%%%%
-    a1 = -0.025; % -T*(w_n^2)
-    a2 = 0.99; % 1-2*T*xi*w_n
+    a1 = -T*(w_n^2); % -T*(w_n^2)
+    a2 = 1-2*T*xi*w_n; % 1-2*T*xi*w_n
     Ad = [1  T
           a1 a2];
-    b = 0.025; % T*(w_n^2)
+    b = T*(w_n^2); % T*(w_n^2)
     Bd = [0
           b];
     theta_r = Ad*theta_r_k_1 + Bd*theta_m_d; % Reference model

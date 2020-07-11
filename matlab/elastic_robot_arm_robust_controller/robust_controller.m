@@ -52,8 +52,8 @@ function [theta_d, q_r_dot_k, integral] = robust_controller(q_d, q_d_prev, q, qd
     q1 = q(2);
     qdot0 = qdot(1);
     qdot1 = qdot(2);
-    Kp = 10;
-    Ki = 7;
+    Kp = 15;
+    Ki = 3;
     K_hat = [K0 0
              0  K1];
     M_hat = [Ilzz0 + Ilzz1 + (l1^2*ml1)/4 - (l1^2*ml1*sin(q1)^2)/4  0
@@ -68,12 +68,13 @@ function [theta_d, q_r_dot_k, integral] = robust_controller(q_d, q_d_prev, q, qd
     G_hat(1,1) = 0;
     G_hat(2,1) = ml1*g*(l1/2)*cos(q1);
 
-    P = 1.0e-04*[0.6705         0
-         0    0.2758];
+    P = 1.0e-04*[0.2152         0
+                      0    0.0959];
+
     D = [0 0
          0 0
-         1.5 0
-         0 1.5];
+         1 0
+         0 1];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%% Calculate reference signal %%%%
