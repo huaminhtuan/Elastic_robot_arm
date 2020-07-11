@@ -2,8 +2,8 @@ clear
 clc
 close all
 
-path = 'centralised\';
-directory=dir(strcat(path,'*.fig')); % capture everything in the directory with FIG extension
+path = 'decentralised\';
+directory=dir(strcat(path,'decen_uncer*.fig')); % capture everything in the directory with FIG extension
 names={directory.name}; % extract names of all FIG-files
 
 for i=1:length(names)
