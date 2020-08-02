@@ -1,0 +1,3 @@
+3DX_CUI_DEVICES_Supplier: CUI Devices
+3DX_CUI_DEVICES_Description: AMT20 1024 PPR, 8 mm Bore, Locking Connector, Standard Base
+3DX_CUI_DEVICES_Model Number: AMT203S-1024-8000-S
