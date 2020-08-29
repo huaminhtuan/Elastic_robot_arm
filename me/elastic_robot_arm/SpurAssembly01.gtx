@@ -1,4 +1,4 @@
-<SOAP-ENV:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:clr="http://schemas.microsoft.com/soap/encoding/clr/1.0" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+﻿<SOAP-ENV:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:clr="http://schemas.microsoft.com/soap/encoding/clr/1.0" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
 <SOAP-ENV:Body>
 <a1:AssemblyGTX id="ref-1" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/GearTrax/GearTrax-2019%2C%20Version%3D2019.27.16.316%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <m_strFullAssyName id="ref-4">D:\elastic_robot_arm\source\me\elastic_robot_arm\SpurAssembly01.gtx</m_strFullAssyName>
@@ -200,7 +200,7 @@
 <m_name id="ref-38">en-US</m_name>
 <win32LCID>0</win32LCID>
 <culture>1033</culture>
-<m_SortVersion xsi:null="1"/>
+
 </a4:CompareInfo>
 <a4:TextInfo id="ref-20" xmlns:a4="http://schemas.microsoft.com/clr/ns/System.Globalization">
 <m_listSeparator xsi:null="1"/>
