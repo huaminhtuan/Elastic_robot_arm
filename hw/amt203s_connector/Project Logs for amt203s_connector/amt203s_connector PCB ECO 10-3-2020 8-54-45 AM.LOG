@@ -1,0 +1,4 @@
+Removed Pin From Net: NetName=GND Pin=C1-1
+Removed Pin From Net: NetName=5V Pin=C1-2
+Removed Member From Class: ClassName=amt203s_connector Member=C1
+Added Room: Name=amt203s_connector
