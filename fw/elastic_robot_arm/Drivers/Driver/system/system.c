@@ -22,17 +22,13 @@
 #include "motor_controller.h"
 #include "log.h"
 #include "controller.h"
-#include "encoder.h"
 #include "eeprom.h"
+#include "incremental_encoder.h"
+#include "absolute_encoder.h"
 
 /******************************************************************************
  * LOCAL DEFINITION
  *****************************************************************************/
-#define CONTROLLER_SAMPLING_TIME_MSEC	10 /* Millisecond */
-#define CONTROLLER_SAMPLING_TIME_SEC	0.01 /* Second */
-
-#define MAX_MOTOR_CONTROL_VOLTAGE	12 /* Volt */
-
 typedef struct
 {
 	bool System_Flags_runAlgorithm:1;
@@ -98,13 +94,14 @@ void InitSystem()
 	/* Configure the motor controller's essential peripherals */
 	InitMotorController();
 	MotorSetDirection(MOTOR_DIR_POSITIVE);
-	MotorSetDutyCycle(0.2); // min: 0.16
+	MotorSetDutyCycle(1);
 
 	/* Configure controller */
 	InitController();
 
 	/* Configure encoder */
-	InitEncoder();
+	InitIncrementalEncoder();
+	InitAbsoluteEncoder();
 
 	/* Configure EEPROM module */
 //	InitEEPROM();
@@ -112,6 +109,9 @@ void InitSystem()
 	/* Start system timer */
 	SystemStartTimer();
 
+	/* Wait for system to be stable*/
+	int i = 10000;
+	while(i-- != 0);
 	LogPrint(LOG_INFO, "Done, ready to run.....\n");
 	systemState = SYSTEM_STATE_RUN;
 }
@@ -127,60 +127,9 @@ void SystemStateMachineProcessing()
 				/* Clear flag */
 				systemFlags.System_Flags_runAlgorithm = false;
 
-				/* Read motor current angle */
-				double motorAngle;
-				double motorVelocity;
-				MotorReadEncoder(&motorAngle, &motorVelocity, CONTROLLER_SAMPLING_TIME_SEC);
+				/* Run controller */
+				ControllerRun();
 
-				double loadAngle;
-				double loadVelocity;
-				EncoderReadEncoder(&loadAngle, &loadVelocity, CONTROLLER_SAMPLING_TIME_SEC);
-//				LogPrint(LOG_DEBUG, "motor: %f\tload: %f\n", motorAngle, loadAngle);
-
-//				static double prevLoadError = 0;
-//				double currLoadError;
-//				static double prevMotorDesiredAngle = 0;
-				double currMotorDesiredAngle;
-//				currMotorDesiredAngle = Fuzzy(currLoadError, prevLoadError, prevMotorDesiredAngle);
-
-				currMotorDesiredAngle = 0.5;
-				double controlVoltage;
-				static double prevParameter[5] = {6, 194, 6.7, 16, 7};
-				static double prevReferenceModel[2] = {0,0};
-				double currParameter[5];
-				double currReferenceModel[2];
-				MRAC(loadAngle, loadVelocity, motorAngle, motorVelocity, currMotorDesiredAngle, prevParameter, prevReferenceModel,
-						&controlVoltage, currParameter, currReferenceModel);
-				prevParameter[0] = currParameter[0];
-				prevParameter[1] = currParameter[1];
-				prevParameter[2] = currParameter[2];
-				prevParameter[3] = currParameter[3];
-				prevParameter[4] = currParameter[4];
-				prevReferenceModel[0] = currReferenceModel[0];
-				prevReferenceModel[1] = currReferenceModel[1];
-
-
-				/* Saturate output */
-				if(controlVoltage > MAX_MOTOR_CONTROL_VOLTAGE)
-					controlVoltage = MAX_MOTOR_CONTROL_VOLTAGE;
-				else if(controlVoltage < -MAX_MOTOR_CONTROL_VOLTAGE)
-					controlVoltage = -MAX_MOTOR_CONTROL_VOLTAGE;
-
-				/* Set control voltage */
-				if(controlVoltage < 0)
-				{
-					MotorSetDirection(MOTOR_DIR_NEGATIVE);
-					controlVoltage = -controlVoltage;
-				}
-				else
-				{
-					MotorSetDirection(MOTOR_DIR_POSITIVE);
-				}
-				float dutyCycle = (float)(controlVoltage/MAX_MOTOR_CONTROL_VOLTAGE);
-				MotorSetDutyCycle(dutyCycle);
-//				LogPrint(LOG_DEBUG, "%f\t%f\t%f\t%f\t%f\t%f\n", currMotorDesiredAngle-motorAngle, currParameter[0], currParameter[1],
-//																currParameter[2], currParameter[3], currParameter[4]);
-				LogPrint(LOG_DEBUG, "%f\n", controlVoltage);
 			}
 
 			if(systemFlags.System_Flags_storeParamters)
@@ -207,11 +156,21 @@ static inline void InitSystemTimer()
 	MX_TIM2_Init();
 }
 
+/**
+ * @brief : System DMA configuration
+ * @param : None
+ * @return: None
+ */
 static inline void InitSystemDMA()
 {
 	MX_DMA_Init();
 }
 
+/**
+ * @brief : GPIO configuration
+ * @param : None
+ * @return: None
+ */
 static inline void InitSystemGPIO()
 {
 	MX_GPIO_Init();
@@ -279,6 +238,12 @@ static inline void MX_DMA_Init()
 	__HAL_RCC_DMA1_CLK_ENABLE();
 
 	/* DMA interrupt init */
+	/* DMA1_Stream3_IRQn interrupt configuration */
+	HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
+	/* DMA1_Stream4_IRQn interrupt configuration */
+	HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
 	/* DMA1_Stream6_IRQn interrupt configuration */
 	HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
@@ -335,31 +300,31 @@ static inline void MX_TIM2_Init()
  * @param : None
  * @return: None
  */
-static inline void MX_GPIO_Init(void)
+static void MX_GPIO_Init(void)
 {
-	  GPIO_InitTypeDef GPIO_InitStruct = {0};
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-	  /* GPIO Ports Clock Enable */
-	  __HAL_RCC_GPIOC_CLK_ENABLE();
-	  __HAL_RCC_GPIOH_CLK_ENABLE();
-	  __HAL_RCC_GPIOA_CLK_ENABLE();
-	  __HAL_RCC_GPIOB_CLK_ENABLE();
+	/* GPIO Ports Clock Enable */
+	__HAL_RCC_GPIOC_CLK_ENABLE();
+	__HAL_RCC_GPIOH_CLK_ENABLE();
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_GPIOB_CLK_ENABLE();
 
-	  /*Configure GPIO pin Output Level */
-	  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, GPIO_PIN_RESET);
+	/*Configure GPIO pin Output Level */
+	HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, GPIO_PIN_RESET);
 
-	  /*Configure GPIO pin : B1_Pin */
-	  GPIO_InitStruct.Pin = B1_Pin;
-	  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-	  GPIO_InitStruct.Pull = GPIO_NOPULL;
-	  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+	/*Configure GPIO pin : B1_Pin */
+	GPIO_InitStruct.Pin = B1_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-	  /*Configure GPIO pin : DIR_Pin */
-	  GPIO_InitStruct.Pin = DIR_Pin;
-	  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	  GPIO_InitStruct.Pull = GPIO_NOPULL;
-	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	  HAL_GPIO_Init(DIR_GPIO_Port, &GPIO_InitStruct);
+	/*Configure GPIO pin : DIR_Pin */
+	GPIO_InitStruct.Pin = DIR_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(DIR_GPIO_Port, &GPIO_InitStruct);
 }
 
 /**

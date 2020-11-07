@@ -28,9 +28,9 @@
 #define TIM_PWM_PRESCALER	18
 
 #define prevPulse			32767
-#define ENC_PULSE_PER_ROUND	4000
-#define ENC_RAD_PER_PULSE	(2*M_PI/ENC_PULSE_PER_ROUND)
-#define MOTOR_GEAR_REDUCTION_RATIO 27
+#define ENC_PULSE_PER_ROUND	44
+#define ENC_RAD_PER_PULSE	0.1427996660722633 // (2*M_PI/ENC_PULSE_PER_ROUND)
+#define MOTOR_GEAR_REDUCTION_RATIO 217
 
 /******************************************************************************
  * LOCAL VARIABLE DECLARATION

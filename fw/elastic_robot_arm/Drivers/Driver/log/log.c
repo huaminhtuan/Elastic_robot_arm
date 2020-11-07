@@ -57,6 +57,11 @@ void InitLog()
 	MX_USART2_UART_Init();
 }
 
+/**
+ * @brief :
+ * @param :
+ * @return:
+ */
 void LogPrint(LOG_MESSAGE_TYPE_t messageType, const char *string,...)
 {
 	while(transmitInProgress);

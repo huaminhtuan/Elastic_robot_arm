@@ -1,0 +1,7 @@
+absolute_encoder.c:60:6:InitAbsoluteEncoder	8	static
+absolute_encoder.c:70:6:AbsoluteEncoderTriggerReadEncoder	8	static
+absolute_encoder.c:86:6:AbsoluteEncoderReadDataBuffer	16	static
+absolute_encoder.c:102:27:AbsoluteEncoderGetReadStatus	4	static
+absolute_encoder.c:110:13:AbsoluteEncoderReadSequence	8	static
+absolute_encoder.c:142:20:MX_SPI2_Init	8	static
+absolute_encoder.c:163:6:HAL_SPI_TxRxCpltCallback	16	static

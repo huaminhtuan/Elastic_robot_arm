@@ -1,0 +1,5 @@
+Removed Pin From Net: NetName=Motor_Enc_Channel_A Pin=P1-1
+Removed Pin From Net: NetName=Motor_Enc_Channel_B Pin=P1-2
+Added Pin To Net: NetName=Motor_Enc_Channel_B Pin=P1-1
+Added Pin To Net: NetName=Motor_Enc_Channel_A Pin=P1-2
+Added Member To Class: ClassName=robot_extension_board Member=Component P2 PWM

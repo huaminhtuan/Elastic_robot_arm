@@ -1,0 +1,24 @@
+Removed Pin From Net: NetName=Load_Enc_Channel_A Pin=P3-1
+Removed Pin From Net: NetName=Load_Enc_Channel_B Pin=P3-2
+Removed Pin From Net: NetName=GND Pin=P3-3
+Removed Pin From Net: NetName=5V Pin=P4-1
+Removed Pin From Net: NetName=GND Pin=P4-2
+Change Component Footprint: Designator=P2 Old Footprint=HDR1X2 New Footprint=JST-2-Vertical-2.54mm
+Change Component Footprint: Designator=P1 Old Footprint=HDR1X3 New Footprint=JST-3-Vertical-2.54mm
+Change Component Comment : Designator=J1 Old Comment=5V New Comment=5V DC input
+Added Component: Designator=P3(JST-3-Vertical-2.54mm)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=P4(JST-2-Vertical-2.54mm)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=Load_Enc_Channel_A Pin=P3-1
+Added Pin To Net: NetName=Load_Enc_Channel_B Pin=P3-2
+Added Pin To Net: NetName=GND Pin=P3-3
+Added Pin To Net: NetName=5V Pin=P4-1
+Added Pin To Net: NetName=GND Pin=P4-2
+Added Room: Name=robot_extension_board

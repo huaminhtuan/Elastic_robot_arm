@@ -212,13 +212,13 @@ double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
 	}
 
 	/*  Accummulation */
-	varargin_1[0] = rules[0];
-	varargin_1[1] = rules[5];
-	varargin_1[2] = rules[10];
-	varargin_1[3] = rules[1];
-	varargin_1[4] = rules[6];
-	varargin_1[5] = rules[2];
-	if (!rtIsNaN(rules[0])) {
+	varargin_1[0] = rules[22];
+	varargin_1[1] = rules[18];
+	varargin_1[2] = rules[23];
+	varargin_1[3] = rules[14];
+	varargin_1[4] = rules[19];
+	varargin_1[5] = rules[24];
+	if (!rtIsNaN(rules[22])) {
 		idx = 1;
 	} else {
 		idx = 0;
@@ -235,7 +235,7 @@ double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
 	}
 
 	if (idx == 0) {
-		de = rules[0];
+		de = rules[22];
 	} else {
 		de = varargin_1[idx - 1];
 		idx++;
@@ -247,11 +247,11 @@ double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
 		}
 	}
 
-	b_varargin_1[0] = rules[15];
-	b_varargin_1[1] = rules[11];
-	b_varargin_1[2] = rules[7];
-	b_varargin_1[3] = rules[3];
-	if (!rtIsNaN(rules[15])) {
+	b_varargin_1[0] = rules[21];
+	b_varargin_1[1] = rules[17];
+	b_varargin_1[2] = rules[13];
+	b_varargin_1[3] = rules[9];
+	if (!rtIsNaN(rules[21])) {
 		idx = 1;
 	} else {
 		idx = 0;
@@ -268,7 +268,7 @@ double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
 	}
 
 	if (idx == 0) {
-		u_PS = rules[15];
+		u_PS = rules[21];
 	} else {
 		u_PS = b_varargin_1[idx - 1];
 		idx++;
@@ -314,11 +314,11 @@ double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
 		}
 	}
 
-	b_varargin_1[0] = rules[21];
-	b_varargin_1[1] = rules[17];
-	b_varargin_1[2] = rules[13];
-	b_varargin_1[3] = rules[9];
-	if (!rtIsNaN(rules[21])) {
+	b_varargin_1[0] = rules[15];
+	b_varargin_1[1] = rules[11];
+	b_varargin_1[2] = rules[7];
+	b_varargin_1[3] = rules[3];
+	if (!rtIsNaN(rules[15])) {
 		idx = 1;
 	} else {
 		idx = 0;
@@ -335,7 +335,7 @@ double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
 	}
 
 	if (idx == 0) {
-		u_NS = rules[21];
+		u_NS = rules[15];
 	} else {
 		u_NS = b_varargin_1[idx - 1];
 		idx++;
@@ -347,13 +347,13 @@ double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
 		}
 	}
 
-	varargin_1[0] = rules[22];
-	varargin_1[1] = rules[18];
-	varargin_1[2] = rules[23];
-	varargin_1[3] = rules[14];
-	varargin_1[4] = rules[19];
-	varargin_1[5] = rules[24];
-	if (!rtIsNaN(rules[22])) {
+	varargin_1[0] = rules[0];
+	varargin_1[1] = rules[5];
+	varargin_1[2] = rules[10];
+	varargin_1[3] = rules[1];
+	varargin_1[4] = rules[6];
+	varargin_1[5] = rules[2];
+	if (!rtIsNaN(rules[0])) {
 		idx = 1;
 	} else {
 		idx = 0;
@@ -370,7 +370,7 @@ double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
 	}
 
 	if (idx == 0) {
-		u_NB = rules[22];
+		u_NB = rules[0];
 	} else {
 		u_NB = varargin_1[idx - 1];
 		idx++;
@@ -393,13 +393,13 @@ double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
 			((((de + u_PS) + u_ZE) + u_NS) + u_NB) * T + theta_m_d_k_1) * Ku;
 
 	/*  Saturation */
-	if (theta_m_d > theta_m_d_upper_limit) {
-		theta_m_d = theta_m_d_upper_limit;
-	} else {
-		if (theta_m_d < theta_m_d_lower_limit) {
-			theta_m_d = theta_m_d_lower_limit;
-		}
-	}
+//	if (theta_m_d > theta_m_d_upper_limit) {
+//		theta_m_d = theta_m_d_upper_limit;
+//	} else {
+//		if (theta_m_d < theta_m_d_lower_limit) {
+//			theta_m_d = theta_m_d_lower_limit;
+//		}
+//	}
 
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
 	return theta_m_d;

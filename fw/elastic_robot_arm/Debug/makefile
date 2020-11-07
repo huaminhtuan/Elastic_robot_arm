@@ -12,8 +12,9 @@ RM := rm -rf
 -include Drivers/Driver/system/subdir.mk
 -include Drivers/Driver/motor_controller/subdir.mk
 -include Drivers/Driver/log/subdir.mk
--include Drivers/Driver/encoder/subdir.mk
+-include Drivers/Driver/incremental_encoder/subdir.mk
 -include Drivers/Driver/eeprom/subdir.mk
+-include Drivers/Driver/absolute_encoder/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
 -include Core/subdir.mk
@@ -24,6 +25,12 @@ RM := rm -rf
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(strip $(S_DEPS)),)
+-include $(S_DEPS)
+endif
+ifneq ($(strip $(S_UPPER_DEPS)),)
+-include $(S_UPPER_DEPS)
+endif
 ifneq ($(strip $(C_DEPS)),)
 -include $(C_DEPS)
 endif
@@ -49,8 +56,8 @@ elastic_actuator_controller.bin \
 all: elastic_actuator_controller.elf secondary-outputs
 
 # Tool invocations
-elastic_actuator_controller.elf: $(OBJS) $(USER_OBJS) E:\Elastic_robot_arm\firmware\elastic_robot_arm\STM32F446RETX_FLASH.ld
-	arm-none-eabi-gcc -o "elastic_actuator_controller.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\Elastic_robot_arm\firmware\elastic_robot_arm\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="elastic_actuator_controller.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+elastic_actuator_controller.elf: $(OBJS) $(USER_OBJS) D:\elastic_robot_arm\source\fw\elastic_robot_arm\STM32F446RETX_FLASH.ld
+	arm-none-eabi-gcc -o "elastic_actuator_controller.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\elastic_robot_arm\source\fw\elastic_robot_arm\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="elastic_actuator_controller.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

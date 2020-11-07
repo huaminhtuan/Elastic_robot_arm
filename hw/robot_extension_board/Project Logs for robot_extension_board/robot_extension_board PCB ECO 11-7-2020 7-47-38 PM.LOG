@@ -1,0 +1,9 @@
+Removed Pin From Net: NetName=MOSI Pin=P5-1
+Removed Pin From Net: NetName=MISO Pin=P5-2
+Removed Pin From Net: NetName=SCK Pin=P5-3
+Removed Pin From Net: NetName=CS Pin=P5-4
+Added Pin To Net: NetName=SCK Pin=P5-1
+Added Pin To Net: NetName=CS Pin=P5-2
+Added Pin To Net: NetName=MOSI Pin=P5-3
+Added Pin To Net: NetName=MISO Pin=P5-4
+Added Member To Class: ClassName=robot_extension_board Member=Component P5 SPI

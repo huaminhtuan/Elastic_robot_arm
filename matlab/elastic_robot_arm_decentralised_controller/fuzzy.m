@@ -68,15 +68,15 @@ function theta_d = fuzzy(e_l_k, e_l_k_1, theta_d_k_1)
 % | \e|    |    |    |    |    |
 % |de\| NB | NS | ZE | PS | PB |
 % |-----------------------------
-% |	NB| PB | PB | PB | PS | ZE |
+% |	NB| NB | NB | NB | NS | ZE |
 % |-----------------------------
-% | NS| PB | PB | PS | ZE | NS |
+% | NS| NB | NB | NS | ZE | PS |
 % |-----------------------------
-% | ZE| PB | PS | ZE | NS | NB |
+% | ZE| NB | NS | ZE | PS | PB |
 % |-----------------------------
-% | PS| PS | ZE | NS | NB | NB |
+% | PS| NS | ZE | PS | PB | PB |
 % |-----------------------------
-% | PB| ZE | NS | NB | NB | NB |
+% | PB| ZE | PS | PB | PB | PB |
 % ------------------------------
 % MAX-PROD aggregation rules
 %%%
@@ -88,11 +88,11 @@ function theta_d = fuzzy(e_l_k, e_l_k_1, theta_d_k_1)
         end
     end
 % Accummulation
-    u_PB = max([rules(1,1)  rules(1,2)  rules(1,3)  rules(2,1)  rules(2,2)  rules(3,1)]);
-    u_PS = max([rules(1,4)  rules(2,3)  rules(3,2)  rules(4,1)]);
+    u_PB = max([rules(3,5)  rules(4,4)  rules(4,5)  rules(5,3)  rules(5,4)  rules(5,5)]);
+    u_PS = max([rules(2,5)  rules(3,4)  rules(4,3)  rules(5,2)]);
     u_ZE = max([rules(1,5)  rules(2,4)  rules(3,3)  rules(4,2)  rules(5,1)]);
-    u_NS = max([rules(2,5)  rules(3,4)  rules(4,3)  rules(5,2)]);
-    u_NB = max([rules(3,5)  rules(4,4)  rules(4,5)  rules(5,3)  rules(5,4)  rules(5,5)]);
+    u_NS = max([rules(1,4)  rules(2,3)  rules(3,2)  rules(4,1)]);
+    u_NB = max([rules(1,1)  rules(1,2)  rules(1,3)  rules(2,1)  rules(2,2)  rules(3,1)]);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%% Defuzzification %%%%%%%%%

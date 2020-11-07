@@ -12,6 +12,8 @@ SIZE_OUTPUT :=
 OBJDUMP_LIST := 
 EXECUTABLES := 
 OBJS := 
+S_DEPS := 
+S_UPPER_DEPS := 
 C_DEPS := 
 OBJCOPY_BIN := 
 
@@ -23,8 +25,9 @@ Algorithm \
 Core/Src \
 Core/Startup \
 Core \
+Drivers/Driver/absolute_encoder \
 Drivers/Driver/eeprom \
-Drivers/Driver/encoder \
+Drivers/Driver/incremental_encoder \
 Drivers/Driver/log \
 Drivers/Driver/motor_controller \
 Drivers/Driver/system \
