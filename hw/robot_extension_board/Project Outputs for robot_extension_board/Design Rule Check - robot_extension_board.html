@@ -1,0 +1,445 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html">
+<style type="text/css">
+		h1, h2, h3, h4, h5, h6 {
+			font-family : segoe ui;
+			color : black;
+			background-color : #EDE7D9;
+			padding: 0.3em;
+		}
+
+		h1 {
+			font-size: 1.2em;
+		}		
+
+		h2 {
+			font-size: 1.2em;
+		}
+
+		body {
+			font-family : segoe ui;
+		}
+
+		td, th {
+			padding: 0.5em;
+			text-align : left;
+			width: 10em;
+		}
+		th {
+			background-color : #EEEEEE;
+
+		}
+		th.column1, td.column1 {
+			text-align: left;
+			width : auto;
+		}
+		table {
+			width : 100%;
+			font-size: 0.9em;
+		}
+
+		.DRC_summary_header {
+			padding-bottom : 0.1em;
+			border : 0px solid black;
+			width: 100%;
+			align: left;
+		}
+
+		.DRC_summary_header_col1,
+		.DRC_summary_header_col2, 
+		.DRC_summary_header_col3 {
+			color : black;
+			font-size:100%;
+			padding : 0em;
+			padding-top : 0.2em;
+			padding-bottom 0.2em;
+			border : 0px solid black;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.DRC_summary_header_col1 {
+			font-weight: bold;
+			width: 8em;
+		}
+
+		.DRC_summary_header_col2 {
+			width: 0.1em;
+		
+		}
+
+		.DRC_summary_header_col3 {
+			width : auto;
+		}
+
+		.header_holder {
+		    Width = 100%;
+		    border = 0px solid green;
+		    padding = 0;
+		}
+
+
+		.front_matter, .front_matter_column1, .front_matter_column2, .front_matter_column3
+		{
+			left : 0;
+			top : 0;
+			padding: 0em;
+			padding-top : 0.1em;
+			border : 0px solid black;
+			width : 100%;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.front_matter_column1 {
+			width : 8em;
+			font-weight: bold;
+		}
+
+		.front_matter_column2 {
+			width: 0.1em;
+		}
+
+		.front_matter_column3 {
+			width : auto;
+		}
+
+		.total_column1, .total_column {
+			font-weight : bold;
+		}
+		.total_column1 {
+			text-align : left;
+		}
+		.warning, .error {
+			color : red;
+			font-weight : bold;
+		}
+		tr.onmouseout_odd {
+			background-color : #white;
+		}
+		tr.onmouseout_even { 
+			background-color : #FAFAFA;
+		}
+		tr.onmouseover_odd, tr.onmouseover_even { 
+			background-color : #EEEEEE;
+		} 
+		a:link, a:visited, .q a:link,.q a:active,.q {
+			color: #21489e; 
+		}
+		a:link.callback, a:visited.callback { 
+			color: #21489e;
+		}
+		a:link.customize, a:visited.customize {
+			color: #C0C0C0;
+			position: absolute; 
+			right: 10px;
+		}	
+		p.contents_level1 {
+			font-weight : bold;
+			font-size : 110%;
+			margin : 0.5em;
+		}
+		p.contents_level2 {
+			position : relative;
+			left : 20px;
+			margin : 0.5em;
+		}
+	</style><script type="text/javascript">
+		function coordToMils(coord) {
+			var number = coord / 10000;
+			
+			if (number != number.toFixed(3))
+				number = number.toFixed(3);
+
+			return number + 'mil'
+		}
+
+		function coordToMM(coord) {
+			var number = 0.0254 * coord / 10000;
+			
+			if (number != number.toFixed(4))
+				number = number.toFixed(4);
+			
+			return number + 'mm'
+		}
+	
+		function convertCoord(coordNode, units) {
+			for (var i = 0; i < coordNode.childNodes.length; i++) {
+				coordNode.removeChild(coordNode.childNodes[i]);
+			}
+
+			var coord = coordNode.getAttribute('value');
+			if (coord != null) {
+				if (units == 'mm') {
+					textNode = document.createTextNode(coordToMM(coord));
+					coordNode.appendChild(textNode);
+				} else if (units == 'mil') {
+					textNode = document.createTextNode(coordToMils(coord));		
+					coordNode.appendChild(textNode);	
+				}
+			}
+		}
+	
+		function convertUnits(unitNode, units) {
+			for (var i = 0; i < unitNode.childNodes.length; i++) {
+				unitNode.removeChild(unitNode.childNodes[i]);		
+			}
+		
+			textNode = document.createTextNode(units); 
+			unitNode.appendChild(textNode);
+		}
+	
+		function changeUnits(radio_input, units) {
+			if (radio_input.checked) {
+			
+				var elements = document.getElementsByName('coordinate');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertCoord(elements[i], units);
+					}
+				}
+	
+				var elements = document.getElementsByName('units');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertUnits(elements[i], units);
+					}
+				}
+			}
+		}
+	</script><title>Design Rule Verification Report</title>
+</head>
+<body onload=""><img ALT="Altium" src="
+			file://C:\Users\Public\Documents\Altium\AD18\Templates\AD_logo.png
+		"><h1>Design Rule Verification Report</h1>
+<table class="header_holder">
+<td class="column1">
+<table class="front_matter">
+<tr class="front_matter">
+<td class="front_matter_column1">Date:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">11/9/2020</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">10:23:18 PM</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Elapsed Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">00:00:00</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Filename:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3"><a href="file:///D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc" class="file"><acronym title="D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc">D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc</acronym></a></td>
+</tr>
+</table>
+</td>
+<td class="column2">
+<table class="DRC_summary_header">
+<tr>
+<td class="DRC_summary_header_col1">Warnings:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3">0</td></tr>
+<tr>
+<td class="DRC_summary_header_col1">Rule Violations:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3" style="color : red">39</td></tr>
+</table>
+</td>
+</table><a name="IDRH5WVSHFN2QGP2TKWJMICI52QKZFSHJ0355KEXDXOAND0DI3IZ1B"><h2>Summary</h2></a><table>
+<tr>
+<th class="column1">Warnings</th>
+<th class="column2">Count</th>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">0</td>
+</tr>
+</table><br><table>
+<tr>
+<th class="column1">Rule Violations</th>
+<th class="column2">Count</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDFUTPEMYTCOUIJMKV1IAZETAEYE3D3UZJZYKW5IMWUQ4CENDYZNKN">Clearance Constraint (Gap=10mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDLQYIUC1RZZOTBK4CVOYC4M33EZQMBQKHTOMHTIU2CM15NNKNGYH">Short-Circuit Constraint (Allowed=No) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDTSJFJGNPKLJQOVPZ2VOSYZEC2K0HXLALDNUTROOXUD4STK2UGVUP">Un-Routed Net Constraint ( (All) )</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDFVPKT2NBWTEHONVAKTBFRKPXKLDVVIG4311MW4FWZ4G3453R5DBP">Modified Polygon (Allow modified: No), (Allow shelved: No)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDLBOG4001DF50COVB1KKZ1BTWMEMNM2TIUSVWMNE2U0EGE1UOKXUI">Width Constraint (Min=10mil) (Max=50mil) (Preferred=10mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#ID3WFEXZ5PANQKFNR0JBEFIJDCLPEQ2NXVER1USAPTYTR0MUX20WOP">Routing Layers(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#ID1PPTYGKFU3C1NYZPQ3JJPKVNENFLLPUOEQIRJBITBXMNXBCK2MNK">Power Plane Connect Rule(Relief Connect )(Expansion=20mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDSARKHGHCXIVFL5K1M00DXYIP4FAL1IKPUX1GUSKODUUDR54N5Q4J">Hole Size Constraint (Min=1mil) (Max=236.22mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDLYT5JSTS2XSEM5ISOP3A30KIYO2W4KMG1KHOSKFSXFIOX0JY1LZO">Hole To Hole Clearance (Gap=10mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDELLRQ5QVEPXTLM3TGJQ0BHL0AOIWNYNLGNSHNCB4JNN5M0E3I4QG">Minimum Solder Mask Sliver (Gap=10mil) (All),(All)</a></td>
+<td class="column2">39</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDNTUVEFT3BBQ0NQRJCXXKBKA2KE0YS2AEHO005XMUCVPQ2KIUN0RI">Net Antennae (Tolerance=0mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDE1PK2CIA1TLMD0HYYRE5IWAOZE2AY0X5ZGQF1PCKO0MFC3OPQF1H">Component Clearance Constraint ( Horizontal Gap = 10mil, Vertical Gap = 10mil ) (All),(All) </a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDYFCD4J1P5CCQDSUVBF2O05TWNS1KUCRCDD50PQ3JLUPJ0L231L">Height Constraint (Min=0mil) (Max=1000mil) (Prefered=500mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">39</td>
+</tr>
+</table><br><a name="IDELLRQ5QVEPXTLM3TGJQ0BHL0AOIWNYNLGNSHNCB4JNN5M0E3I4QG"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Minimum Solder Mask Sliver (Gap=10mil) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=3559.375mil|Location2.Y=3570.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=3559.375mil|Location2.Y=3570.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-1(3020mil,3565mil) on Multi-Layer And Pad H1-2(3120mil,3565mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=3159.375mil|Location2.Y=3170.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=3159.375mil|Location2.Y=3170.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-10(3120mil,3165mil) on Multi-Layer And Pad H1-9(3020mil,3165mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=3059.375mil|Location2.Y=3070.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=3059.375mil|Location2.Y=3070.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-11(3020mil,3065mil) on Multi-Layer And Pad H1-12(3120mil,3065mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2959.375mil|Location2.Y=2970.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2959.375mil|Location2.Y=2970.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-13(3020mil,2965mil) on Multi-Layer And Pad H1-14(3120mil,2965mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2859.375mil|Location2.Y=2870.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2859.375mil|Location2.Y=2870.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-15(3020mil,2865mil) on Multi-Layer And Pad H1-16(3120mil,2865mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2759.375mil|Location2.Y=2770.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2759.375mil|Location2.Y=2770.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-17(3020mil,2765mil) on Multi-Layer And Pad H1-18(3120mil,2765mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2659.375mil|Location2.Y=2670.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2659.375mil|Location2.Y=2670.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-19(3020mil,2665mil) on Multi-Layer And Pad H1-20(3120mil,2665mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2559.375mil|Location2.Y=2570.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2559.375mil|Location2.Y=2570.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-21(3020mil,2565mil) on Multi-Layer And Pad H1-22(3120mil,2565mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2459.375mil|Location2.Y=2470.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2459.375mil|Location2.Y=2470.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-23(3020mil,2465mil) on Multi-Layer And Pad H1-24(3120mil,2465mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2359.375mil|Location2.Y=2370.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2359.375mil|Location2.Y=2370.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-25(3020mil,2365mil) on Multi-Layer And Pad H1-26(3120mil,2365mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2259.375mil|Location2.Y=2270.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2259.375mil|Location2.Y=2270.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-27(3020mil,2265mil) on Multi-Layer And Pad H1-28(3120mil,2265mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2159.375mil|Location2.Y=2170.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2159.375mil|Location2.Y=2170.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-29(3020mil,2165mil) on Multi-Layer And Pad H1-30(3120mil,2165mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=3459.375mil|Location2.Y=3470.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=3459.375mil|Location2.Y=3470.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-3(3020mil,3465mil) on Multi-Layer And Pad H1-4(3120mil,3465mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2059.375mil|Location2.Y=2070.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=2059.375mil|Location2.Y=2070.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-31(3020mil,2065mil) on Multi-Layer And Pad H1-32(3120mil,2065mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=1959.375mil|Location2.Y=1970.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=1959.375mil|Location2.Y=1970.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-33(3020mil,1965mil) on Multi-Layer And Pad H1-34(3120mil,1965mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=1859.375mil|Location2.Y=1870.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=1859.375mil|Location2.Y=1870.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-35(3020mil,1865mil) on Multi-Layer And Pad H1-36(3120mil,1865mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=1759.375mil|Location2.Y=1770.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=1759.375mil|Location2.Y=1770.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-37(3020mil,1765mil) on Multi-Layer And Pad H1-38(3120mil,1765mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=3559.375mil|Location2.Y=3570.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=3559.375mil|Location2.Y=3570.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-39(5420mil,3565mil) on Multi-Layer And Pad H1-40(5520mil,3565mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=3459.375mil|Location2.Y=3470.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=3459.375mil|Location2.Y=3470.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-41(5420mil,3465mil) on Multi-Layer And Pad H1-42(5520mil,3465mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=3359.375mil|Location2.Y=3370.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=3359.375mil|Location2.Y=3370.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-43(5420mil,3365mil) on Multi-Layer And Pad H1-44(5520mil,3365mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=3259.375mil|Location2.Y=3270.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=3259.375mil|Location2.Y=3270.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-45(5420mil,3265mil) on Multi-Layer And Pad H1-46(5520mil,3265mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=3159.375mil|Location2.Y=3170.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=3159.375mil|Location2.Y=3170.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-47(5420mil,3165mil) on Multi-Layer And Pad H1-48(5520mil,3165mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=3059.375mil|Location2.Y=3070.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=3059.375mil|Location2.Y=3070.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-49(5420mil,3065mil) on Multi-Layer And Pad H1-50(5520mil,3065mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=3359.375mil|Location2.Y=3370.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=3359.375mil|Location2.Y=3370.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-5(3020mil,3365mil) on Multi-Layer And Pad H1-6(3120mil,3365mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2959.375mil|Location2.Y=2970.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2959.375mil|Location2.Y=2970.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-51(5420mil,2965mil) on Multi-Layer And Pad H1-52(5520mil,2965mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2859.375mil|Location2.Y=2870.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2859.375mil|Location2.Y=2870.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-53(5420mil,2865mil) on Multi-Layer And Pad H1-54(5520mil,2865mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2759.375mil|Location2.Y=2770.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2759.375mil|Location2.Y=2770.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-55(5420mil,2765mil) on Multi-Layer And Pad H1-56(5520mil,2765mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2659.375mil|Location2.Y=2670.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2659.375mil|Location2.Y=2670.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-57(5420mil,2665mil) on Multi-Layer And Pad H1-58(5520mil,2665mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2559.375mil|Location2.Y=2570.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2559.375mil|Location2.Y=2570.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-59(5420mil,2565mil) on Multi-Layer And Pad H1-60(5520mil,2565mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2459.375mil|Location2.Y=2470.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2459.375mil|Location2.Y=2470.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-61(5420mil,2465mil) on Multi-Layer And Pad H1-62(5520mil,2465mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2359.375mil|Location2.Y=2370.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2359.375mil|Location2.Y=2370.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-63(5420mil,2365mil) on Multi-Layer And Pad H1-64(5520mil,2365mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2259.375mil|Location2.Y=2270.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2259.375mil|Location2.Y=2270.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-65(5420mil,2265mil) on Multi-Layer And Pad H1-66(5520mil,2265mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2159.375mil|Location2.Y=2170.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2159.375mil|Location2.Y=2170.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-67(5420mil,2165mil) on Multi-Layer And Pad H1-68(5520mil,2165mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2059.375mil|Location2.Y=2070.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=2059.375mil|Location2.Y=2070.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-69(5420mil,2065mil) on Multi-Layer And Pad H1-70(5520mil,2065mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=3259.375mil|Location2.Y=3270.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3064.375mil|Location2.X=3075.625mil|Location1.Y=3259.375mil|Location2.Y=3270.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-7(3020mil,3265mil) on Multi-Layer And Pad H1-8(3120mil,3265mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=1959.375mil|Location2.Y=1970.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=1959.375mil|Location2.Y=1970.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-71(5420mil,1965mil) on Multi-Layer And Pad H1-72(5520mil,1965mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=1859.375mil|Location2.Y=1870.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=1859.375mil|Location2.Y=1870.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-73(5420mil,1865mil) on Multi-Layer And Pad H1-74(5520mil,1865mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=1759.375mil|Location2.Y=1770.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5464.375mil|Location2.X=5475.625mil|Location1.Y=1759.375mil|Location2.Y=1770.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (6.016mil &lt; 10mil) Between Pad H1-75(5420mil,1765mil) on Multi-Layer And Pad H1-76(5520mil,1765mil) on Multi-Layer [Top Solder] Mask Sliver [6.016mil] / [Bottom Solder] Mask Sliver [6.016mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3168.903mil|Location2.X=3180.153mil|Location1.Y=1398.804mil|Location2.Y=1410.054mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\elastic_robot_arm\source\hw\robot_extension_board\robot_extension_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3168.903mil|Location2.X=3180.153mil|Location1.Y=1398.804mil|Location2.Y=1410.054mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.142mil &lt; 10mil) Between Pad J1-1(3116.024mil,1363.425mil) on Multi-Layer And Via (3174.528mil,1435mil) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [3.142mil] / [Bottom Solder] Mask Sliver [3.142mil]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br></body>
+</html>

@@ -128,7 +128,7 @@ void SystemStateMachineProcessing()
 				systemFlags.System_Flags_runAlgorithm = false;
 
 				/* Run controller */
-				ControllerRun();
+				ControllerRun(6.28f);
 
 			}
 

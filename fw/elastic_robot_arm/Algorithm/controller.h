@@ -35,7 +35,7 @@
  * PUBLIC FUNCTION PROTOTYPE
  *****************************************************************************/
 void InitController();
-void ControllerRun();
+void ControllerRun(double loadDesiredAngle);
 
 #endif
 /******************************************************************************

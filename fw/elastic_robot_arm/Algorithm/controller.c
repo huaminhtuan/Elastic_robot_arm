@@ -58,7 +58,7 @@ void InitController()
  * @param :
  * @return:
  */
-void ControllerRun()
+void ControllerRun(double loadDesiredAngle)
 {
 	/* Read motor current angle */
 	double motorAngle;
@@ -77,7 +77,7 @@ void ControllerRun()
 	/* Fuzzy PI controller */
 	double currMotorDesiredAngle;
 	static double prevMotorDesiredAngle = 0;
-	double currLoadError = 1.5 - loadAngle;
+	double currLoadError = loadDesiredAngle - loadAngle;
 	static double prevLoadError = 0;
 	currMotorDesiredAngle = Fuzzy(currLoadError, prevLoadError, prevMotorDesiredAngle);
 	prevLoadError = currLoadError;

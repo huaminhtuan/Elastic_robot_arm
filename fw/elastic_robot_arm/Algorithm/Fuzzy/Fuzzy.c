@@ -25,8 +25,8 @@
 /******************************************************************************
  * LOCAL DEFINITION
  *****************************************************************************/
-#define Kp						1
-#define Kd						1
+#define Kp						2
+#define Kd						0.1
 #define Ku						1
 #define T						0.01
 #define theta_m_d_upper_limit	M_PI

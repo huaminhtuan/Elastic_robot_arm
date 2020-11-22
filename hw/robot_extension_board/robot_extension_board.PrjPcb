@@ -89,6 +89,10 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=FKDBUVOP
 
+[GeneratedDocument1]
+DocumentPath=Project Outputs for robot_extension_board\Design Rule Check - robot_extension_board.html
+DItemRevisionGUID=
+
 [Configuration1]
 Name=Default Configuration
 ParameterCount=0
