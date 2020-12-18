@@ -37,7 +37,7 @@
  *****************************************************************************/
 static TIM_HandleTypeDef htim1;
 static TIM_HandleTypeDef htim3;
-static double motorPosition = 0;
+static int64_t motorPosition = 0;
 
 /******************************************************************************
  * LOCAL FUNCTION PROTOTYPE
@@ -94,16 +94,15 @@ void MotorSetDutyCycle(float dutyCycle)
  */
 void MotorReadEncoder(double *position, double *velocity, double samplingTime)
 {
-	uint16_t currPulse;
-	double encoderIncrement;
+	int64_t currPulse;
+	int64_t encoderIncrement;
 
 	currPulse = TIM3->CNT;
-	encoderIncrement = (double)((currPulse - prevPulse)*ENC_RAD_PER_PULSE);
-	encoderIncrement /= MOTOR_GEAR_REDUCTION_RATIO;
+	encoderIncrement = (int64_t)(currPulse - prevPulse);
 
-	motorPosition += encoderIncrement;
-	*position = motorPosition;
-	*velocity = encoderIncrement/samplingTime;
+	motorPosition += (encoderIncrement);
+	*position = (double)(motorPosition*ENC_RAD_PER_PULSE/MOTOR_GEAR_REDUCTION_RATIO);
+	*velocity = (double)((encoderIncrement*ENC_RAD_PER_PULSE/MOTOR_GEAR_REDUCTION_RATIO)/samplingTime);
 
 	/* Reset counter */
 	TIM3->CNT = prevPulse;

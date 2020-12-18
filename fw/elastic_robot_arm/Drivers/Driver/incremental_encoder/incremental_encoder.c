@@ -31,7 +31,7 @@
  * LOCAL VARIABLE DECLARATION
  *****************************************************************************/
 static TIM_HandleTypeDef htim4;
-static double motorPosition = 0;
+static int64_t loadPosition = 0;
 
 /******************************************************************************
  * LOCAL FUNCTION PROTOTYPE
@@ -61,18 +61,18 @@ void InitIncrementalEncoder()
  */
 void IncrementalEncoderReadEncoder(double *position, double *velocity, double samplingTime)
 {
-	uint16_t currPulse;
-	double encoderIncrement;
+	int64_t currPulse;
+	int64_t encoderIncrement;
 
 	currPulse = TIM4->CNT;
-	encoderIncrement = (double)((currPulse - prevPulse)*ENC_RAD_PER_PULSE);
+	encoderIncrement = (int64_t)(currPulse - prevPulse);
 
-	motorPosition += encoderIncrement;
-	*position = motorPosition;
-	*velocity = encoderIncrement/samplingTime;
+	loadPosition += (encoderIncrement);
+	*position = (double)(loadPosition*ENC_RAD_PER_PULSE);
+	*velocity = (double)((encoderIncrement*ENC_RAD_PER_PULSE)/samplingTime);
 
 	/* Reset counter */
-	TIM4->CNT = 32767;
+	TIM4->CNT = prevPulse;
 }
 
 /******************************************************************************

@@ -18,6 +18,7 @@
  * INCLUDE
  *****************************************************************************/
 #include <stdbool.h>
+#include <math.h>
 #include "main.h"
 #include "motor_controller.h"
 #include "log.h"
@@ -116,6 +117,8 @@ void InitSystem()
 	systemState = SYSTEM_STATE_RUN;
 }
 
+#define omega 0.12566371f // 2*pi/T, T = 50s
+#define phase 0.0f
 void SystemStateMachineProcessing()
 {
 	switch (systemState) {
@@ -128,8 +131,31 @@ void SystemStateMachineProcessing()
 				systemFlags.System_Flags_runAlgorithm = false;
 
 				/* Run controller */
-				ControllerRun(6.28f);
+				// sine wave
+//				static double time = 0;
+//				double loadDesiredAngle = 0.5*sin(omega*time + phase);
+//				ControllerRun(loadDesiredAngle);
+//				time += 0.01;
 
+				// square wave
+				static double time = 0;
+				static double loadDesiredAngle = 0.5f;
+				if((time >= 20.0f) && (time < 40.0f))
+					loadDesiredAngle = 0;
+				else if((time >= 40.0f) && (time < 60.0f))
+					loadDesiredAngle = -0.5f;
+				else if((time >= 60.0f) && (time < 80.0f))
+					loadDesiredAngle = 0;
+				else if(time >= 80.0f)
+				{
+					loadDesiredAngle = 0.5f;
+					time = 0;
+				}
+
+				ControllerRun(loadDesiredAngle);
+				time += 0.01;
+
+//				ControllerRun(0.0f);
 			}
 
 			if(systemFlags.System_Flags_storeParamters)

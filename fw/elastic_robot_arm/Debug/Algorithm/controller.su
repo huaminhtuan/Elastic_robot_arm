@@ -1,2 +1,2 @@
-controller.c:52:6:InitController	4	static
-controller.c:61:6:ControllerRun	224	static
+controller.c:53:6:InitController	4	static
+controller.c:62:6:ControllerRun	184	static

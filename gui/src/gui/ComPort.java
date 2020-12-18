@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -8,8 +7,6 @@ import java.io.OutputStream;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import gnu.io.*;
@@ -263,12 +260,12 @@ public class ComPort implements SerialPortEventListener
 			{
 				String inputLine = input.readLine();
 				StyledDocument styledDocument = console.getStyledDocument();
-				Style style = console.addStyle(null, null);
-				StyleConstants.setForeground(style, Color.RED);				
+//				Style style = console.addStyle(null, null);
+//				StyleConstants.setForeground(style, Color.RED);				
 		        try 
 		        { 
 		        	styledDocument.insertString(styledDocument.getLength(), inputLine + 
-		        		System.getProperty("line.separator"),style);
+		        		System.getProperty("line.separator"), null);
 		        }
 		        catch (BadLocationException e)
 		        {

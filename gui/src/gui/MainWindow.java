@@ -59,6 +59,7 @@ public class MainWindow {
 		frame.setResizable(false);
 		frame.setBounds(100, 100, 880, 688);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
 		
 		JPanel serialPortControlPanel = new JPanel();
 		serialPortControlPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
@@ -66,7 +67,7 @@ public class MainWindow {
 		serialPortControlPanel.setLayout(null);
 		
 		JComboBox<String> cbStopBit = new JComboBox<>();
-		cbStopBit.setBounds(120, 138, 111, 23);
+		cbStopBit.setBounds(134, 143, 111, 23);
 		serialPortControlPanel.add(cbStopBit);
 		cbStopBit.setModel(new DefaultComboBoxModel<>(new String[] {"1", "1.5", "2"}));
 		
@@ -84,7 +85,7 @@ public class MainWindow {
 		lbStatus.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JComboBox<String> cbComPort = new JComboBox<>();
-		cbComPort.setBounds(120, 36, 111, 23);
+		cbComPort.setBounds(134, 35, 111, 23);
 		serialPortControlPanel.add(cbComPort);
 		
 		JLabel lblComport = new JLabel("COMPORT");
@@ -93,7 +94,7 @@ public class MainWindow {
 		lblComport.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JComboBox<String> cbBaudrate = new JComboBox<>();
-		cbBaudrate.setBounds(120, 70, 111, 23);
+		cbBaudrate.setBounds(134, 70, 111, 23);
 		serialPortControlPanel.add(cbBaudrate);
 		cbBaudrate.setModel(new DefaultComboBoxModel<>(new String[] {"110", "150", "300", "1200", "2400", "4800", "9600", "19200", "38400", "57600", "115200", "230400", "460800", "921600"}));
 		
@@ -103,7 +104,7 @@ public class MainWindow {
 		lblBaudrate.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JComboBox<String> cbParity = new JComboBox<>();
-		cbParity.setBounds(120, 104, 111, 23);
+		cbParity.setBounds(134, 110, 111, 23);
 		serialPortControlPanel.add(cbParity);
 		cbParity.setModel(new DefaultComboBoxModel<>(new String[] {"None", "Odd", "Even"}));
 		
@@ -129,7 +130,7 @@ public class MainWindow {
 		serialPortControlPanel.add(lblFlowControl);
 		
 		JComboBox<String> cbFlowControl = new JComboBox<>();
-		cbFlowControl.setBounds(120, 172, 111, 20);
+		cbFlowControl.setBounds(134, 175, 111, 20);
 		serialPortControlPanel.add(cbFlowControl);
 		cbFlowControl.setModel(new DefaultComboBoxModel<>(new String[] {"None", "RTS/CTS IN", "RTS/CTS OUT", "XON/XOFF IN", "XON/XOFF OUT"}));
 		
@@ -157,7 +158,7 @@ public class MainWindow {
 		
 		JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL, serialPortControlPanel, scrollPane);
 		splitPane.setPreferredSize(new Dimension(0, 240));
-		splitPane.setResizeWeight(0.33);
+		splitPane.setResizeWeight(0.35);
 		frame.getContentPane().add(splitPane, BorderLayout.NORTH);
 	
 		btnConnect.addActionListener(new ActionListener() {
@@ -229,7 +230,5 @@ public class MainWindow {
 				}	
 			}
 		}, 0, 1000);
-		
-		frame.setVisible(true);
 	}
 }

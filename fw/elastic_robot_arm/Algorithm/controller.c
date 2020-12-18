@@ -17,6 +17,7 @@
 /******************************************************************************
  * INCLUDE
  *****************************************************************************/
+#include <stdint.h>
 #include "main.h"
 #include "motor_controller.h"
 #include "log.h"
@@ -105,6 +106,13 @@ void ControllerRun(double loadDesiredAngle)
 	else if(controlVoltage < -MAX_MOTOR_CONTROL_VOLTAGE)
 		controlVoltage = -MAX_MOTOR_CONTROL_VOLTAGE;
 
+	static uint32_t timeStamp = 0;
+	LogPrint(LOG_DEBUG, "%d\t%f\t%f\t%f\n", timeStamp, loadAngle, motorAngle, controlVoltage);
+//	LogPrint(LOG_DEBUG, "%d\t%f\t%f\t%f\n", timeStamp, currReferenceModel[0], motorAngle, controlVoltage);
+//	LogPrint(LOG_DEBUG, "%d\t%f\t%f\t%f\t%f\t%f\n", timeStamp, currParameter[0], currParameter[1],
+//			currParameter[2], currParameter[3], currParameter[4]);
+	timeStamp++;
+
 	/* Set control voltage */
 	if(controlVoltage < 0)
 	{
@@ -118,11 +126,7 @@ void ControllerRun(double loadDesiredAngle)
 	float dutyCycle = (float)(controlVoltage/MAX_MOTOR_CONTROL_VOLTAGE);
 	MotorSetDutyCycle(dutyCycle);
 
-//	if((loadAngle > 6.28) || (loadAngle < -6.28))
-//		MotorSetDutyCycle(0);
-	LogPrint(LOG_DEBUG, "%f\t%f\t%f\t%f\t%f\t%f\t%f\n",
-			prevParameter[0], prevParameter[1], prevParameter[2], prevParameter[3], prevParameter[4],
-			loadAngle, motorAngle);
+
 }
 
 /******************************************************************************
