@@ -32,6 +32,12 @@ typedef enum
 	LOG_ERROR,
 }LOG_MESSAGE_TYPE_t;
 
+typedef enum
+{
+	LOG_RECEIVE_PROGRESS_DONE,
+	LOG_RECEIVE_PROGRESS_WAITING,
+}LOG_RECEIVE_PROGRESS_t;
+
 /******************************************************************************
  * PUBLIC VARIABLE
  *****************************************************************************/
@@ -41,6 +47,9 @@ typedef enum
  *****************************************************************************/
 void InitLog();
 void LogPrint(LOG_MESSAGE_TYPE_t messageType, const char *string,...);
+
+LOG_RECEIVE_PROGRESS_t LogCheckReceiveDone();
+void LogGetReceivedData(char *data);
 
 #endif
 /******************************************************************************

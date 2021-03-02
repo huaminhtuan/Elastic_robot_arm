@@ -55,7 +55,7 @@ static inline void MX_TIM3_Init(void);
  * @param : None
  * @return: None
  */
-void InitMotorController()
+void InitMotorController(double initPosition)
 {
 	/* Configure PWM for H-bridge controlling */
 	MX_TIM1_Init();
@@ -63,6 +63,8 @@ void InitMotorController()
 	/* Configure ENC for encoder reading */
 	MX_TIM3_Init();
 	HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
+	/* Set initial position value */
+	motorPosition = (int64_t)(initPosition*MOTOR_GEAR_REDUCTION_RATIO/ENC_RAD_PER_PULSE);
 }
 
 void MotorSetDutyCycle(float dutyCycle)

@@ -1,4 +1,7 @@
-log.c:55:6:InitLog	8	static
-log.c:65:6:LogPrint	28	static
-log.c:114:20:MX_USART2_UART_Init	8	static
-log.c:142:6:HAL_UART_TxCpltCallback	16	static
+log.c:58:6:InitLog	8	static
+log.c:69:6:LogPrint	28	static
+log.c:110:24:LogCheckReceiveDone	8	static
+log.c:124:6:LogGetReceivedData	24	static
+log.c:142:20:MX_USART2_UART_Init	8	static
+log.c:158:6:HAL_UART_TxCpltCallback	16	static
+log.c:164:6:HAL_UART_RxCpltCallback	16	static

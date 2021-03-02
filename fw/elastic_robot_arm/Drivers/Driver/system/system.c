@@ -30,6 +30,8 @@
 /******************************************************************************
  * LOCAL DEFINITION
  *****************************************************************************/
+#define JOINT_2
+
 typedef struct
 {
 	bool System_Flags_runAlgorithm:1;
@@ -93,16 +95,35 @@ void InitSystem()
 	InitSystemTimer();
 
 	/* Configure the motor controller's essential peripherals */
-	InitMotorController();
+#ifdef JOINT_2
+	InitMotorController(M_PI_2*4);
+#endif
+#ifdef JOINT_1
+	InitMotorController(-M_PI_2*4);
+#endif
 	MotorSetDirection(MOTOR_DIR_POSITIVE);
-	MotorSetDutyCycle(1);
+	MotorSetDutyCycle(0);
 
 	/* Configure controller */
 	InitController();
 
 	/* Configure encoder */
-	InitIncrementalEncoder();
 	InitAbsoluteEncoder();
+	double currentJointPos = 0;
+	if(AbsoluteEncoderReadEncoder(&currentJointPos) == ABS_ENC_READ_STATUS_OK)
+		LogPrint(LOG_DEBUG, "Current joint position: %f\n", currentJointPos);
+	else
+	{
+		LogPrint(LOG_DEBUG, "Current joint position read failed\n");
+		while(1);
+	}
+//	InitIncrementalEncoder(currentJointPos);
+#ifdef JOINT_2
+	InitIncrementalEncoder(M_PI_2);
+#endif
+#ifdef JOINT_1
+	InitIncrementalEncoder(-M_PI_2);
+#endif
 
 	/* Configure EEPROM module */
 //	InitEEPROM();
@@ -113,12 +134,31 @@ void InitSystem()
 	/* Wait for system to be stable*/
 	int i = 10000;
 	while(i-- != 0);
+#ifdef JOINT_1
+	LogPrint(LOG_INFO, "Joint 1\n");
+#endif
+#ifdef JOINT_2
+	LogPrint(LOG_INFO, "Joint 2\n");
+#endif
 	LogPrint(LOG_INFO, "Done, ready to run.....\n");
-	systemState = SYSTEM_STATE_RUN;
+	systemState = SYSTEM_STATE_INIT;
 }
 
 #define omega 0.12566371f // 2*pi/T, T = 50s
 #define phase 0.0f
+
+//#ifdef JOINT_2
+//#define start	2.356194 // joint 2
+//#define	end		3.665191
+//#define step	0.001309
+//#endif
+//
+//#ifdef JOINT_1
+//#define start	0 // joint 1
+//#define	end		3.141593
+//#define step	0.003142
+//#endif
+
 void SystemStateMachineProcessing()
 {
 	switch (systemState) {
@@ -132,30 +172,76 @@ void SystemStateMachineProcessing()
 
 				/* Run controller */
 				// sine wave
-//				static double time = 0;
-//				double loadDesiredAngle = 0.5*sin(omega*time + phase);
-//				ControllerRun(loadDesiredAngle);
-//				time += 0.01;
-
-				// square wave
 				static double time = 0;
-				static double loadDesiredAngle = 0.5f;
-				if((time >= 20.0f) && (time < 40.0f))
-					loadDesiredAngle = 0;
-				else if((time >= 40.0f) && (time < 60.0f))
-					loadDesiredAngle = -0.5f;
-				else if((time >= 60.0f) && (time < 80.0f))
-					loadDesiredAngle = 0;
-				else if(time >= 80.0f)
-				{
-					loadDesiredAngle = 0.5f;
-					time = 0;
-				}
-
+				double loadDesiredAngle = 0.5*sin(omega*time + phase);
 				ControllerRun(loadDesiredAngle);
 				time += 0.01;
 
-//				ControllerRun(0.0f);
+				// square wave
+//				static double time = 0;
+//				static double loadDesiredAngle = 0.5f;
+//				if((time >= 20.0f) && (time < 40.0f))
+//					loadDesiredAngle = 0;
+//				else if((time >= 40.0f) && (time < 60.0f))
+//					loadDesiredAngle = -0.5f;
+//				else if((time >= 60.0f) && (time < 80.0f))
+//					loadDesiredAngle = 0;
+//				else if(time >= 80.0f)
+//				{
+//					loadDesiredAngle = 0.5f;
+//					time = 0;
+//				}
+//
+//				ControllerRun(loadDesiredAngle);
+//				time += 0.01;
+
+				// trajectory testing
+#ifdef JOINT_2
+//				static float qd = start;
+//				static uint16_t counter = 0;
+//				if(counter>6000)
+//				{
+//					ControllerRun(qd);
+//					if(qd<end)
+//						qd += step;
+//				}
+//				else
+//				{
+//					if(counter>3000)
+//						ControllerRun(qd);
+//					else
+//						ControllerRun(M_PI_2);
+//					counter++;
+//				}
+#endif
+
+#ifdef JOINT_1
+//				static float qd = start;
+//				static uint16_t counter = 0;
+//				ControllerRun(qd);
+//				if(counter>6000)
+//				{
+//					if(qd<end)
+//						qd += step;
+////					static float t = 0;
+////					qd = 2*M_PI*(1./(1+exp(-1.2*(t)))-0.5);
+////					t += 0.01;
+//				}
+//				else
+//					counter++;
+#endif
+//				ControllerRun(-M_PI);
+//				ControllerRun(3*M_PI_4);
+
+//				double currentJointPos = 0;
+//				ABS_ENC_READ_STATUS_t absoluteEncoderReadStatus = AbsoluteEncoderReadEncoder(&currentJointPos);
+//				if(absoluteEncoderReadStatus == ABS_ENC_READ_STATUS_OK)
+//					LogPrint(LOG_DEBUG, "Current joint position: %d\n", (uint16_t)(currentJointPos/0.0015339807878856));
+//				else
+//				{
+//					LogPrint(LOG_DEBUG, "Current joint position read failed\n");
+//					while(1);
+//				}
 			}
 
 			if(systemFlags.System_Flags_storeParamters)
@@ -264,12 +350,9 @@ static inline void MX_DMA_Init()
 	__HAL_RCC_DMA1_CLK_ENABLE();
 
 	/* DMA interrupt init */
-	/* DMA1_Stream3_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 0, 0);
-	HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
-	/* DMA1_Stream4_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 0, 0);
-	HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
+	/* DMA1_Stream5_IRQn interrupt configuration */
+	HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
 	/* DMA1_Stream6_IRQn interrupt configuration */
 	HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
@@ -328,29 +411,43 @@ static inline void MX_TIM2_Init()
  */
 static void MX_GPIO_Init(void)
 {
-	GPIO_InitTypeDef GPIO_InitStruct = {0};
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-	/* GPIO Ports Clock Enable */
-	__HAL_RCC_GPIOC_CLK_ENABLE();
-	__HAL_RCC_GPIOH_CLK_ENABLE();
-	__HAL_RCC_GPIOA_CLK_ENABLE();
-	__HAL_RCC_GPIOB_CLK_ENABLE();
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOH_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
-	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, GPIO_PIN_RESET);
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(NSS_GPIO_Port, NSS_Pin, GPIO_PIN_SET);
 
-	/*Configure GPIO pin : B1_Pin */
-	GPIO_InitStruct.Pin = B1_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, GPIO_PIN_RESET);
 
-	/*Configure GPIO pin : DIR_Pin */
-	GPIO_InitStruct.Pin = DIR_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(DIR_GPIO_Port, &GPIO_InitStruct);
+  /*Configure GPIO pin : B1_Pin */
+  GPIO_InitStruct.Pin = B1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : NSS_Pin */
+  GPIO_InitStruct.Pin = NSS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(NSS_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : DIR_Pin */
+  GPIO_InitStruct.Pin = DIR_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(DIR_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 
 /**
@@ -375,6 +472,20 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     	{
     		timerCount = 0;
     		systemFlags.System_Flags_storeParamters = true;
+    	}
+    }
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if(GPIO_Pin == GPIO_PIN_13)
+    {
+    	if(systemState == SYSTEM_STATE_INIT)
+    		systemState = SYSTEM_STATE_RUN;
+    	else if(systemState == SYSTEM_STATE_RUN)
+    	{
+    		systemState = SYSTEM_STATE_INIT;
+    		MotorSetDutyCycle(0);
     	}
     }
 }

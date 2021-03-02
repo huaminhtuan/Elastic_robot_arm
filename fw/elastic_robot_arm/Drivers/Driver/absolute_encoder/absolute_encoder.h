@@ -28,13 +28,9 @@
  *****************************************************************************/
 typedef enum
 {
-	RD_POS_READY_FOR_READING,
-	RD_POS_SEND_READ_COMMAND,
-	RD_POS_WAIT_FOR_RESPONSE,
-	RD_POS_RECEIVE_MSB,
-	RD_POS_RECEIVE_LSB,
-	RD_POS_DATA_BUFFER_READY
-} READ_CURRENT_POS_SEQUENCE;
+	ABS_ENC_READ_STATUS_OK,
+	ABS_ENC_READ_STATUS_FAILED,
+} ABS_ENC_READ_STATUS_t;
 
 /******************************************************************************
  * PUBLIC VARIABLE
@@ -44,9 +40,7 @@ typedef enum
  * PUBLIC FUNCTION PROTOTYPE
  *****************************************************************************/
 void InitAbsoluteEncoder();
-bool AbsoluteEncoderTriggerReadEncoder();
-bool AbsoluteEncoderReadDataBuffer(uint16_t *buf);
-READ_CURRENT_POS_SEQUENCE AbsoluteEncoderGetReadStatus();
+ABS_ENC_READ_STATUS_t AbsoluteEncoderReadEncoder(double *position);
 
 /******************************************************************************
  * PUBLIC INLINE FUNCTION

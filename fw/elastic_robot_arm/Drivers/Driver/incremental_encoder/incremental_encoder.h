@@ -32,7 +32,7 @@
 /******************************************************************************
  * PUBLIC FUNCTION PROTOTYPE
  *****************************************************************************/
-void InitIncrementalEncoder();
+void InitIncrementalEncoder(double initPosition);
 void IncrementalEncoderReadEncoder(double *position, double *velocity, double samplingTime);
 
 #endif

@@ -12,24 +12,26 @@
 % Output theta_r : Current reference model  state variables
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [V_control, phi_k, theta_r]  = mrac(theta_l, theta_l_dot, theta_m, theta_m_dot,... 
-                      theta_m_d, phi_k_1, theta_r_k_1)
+                      theta_m_d, phi_k_1, theta_r_k_1, gamma, Kv, N, T, xi, w_n, q1, q2)
 	assert(isa(theta_l,'double') && isa(theta_l_dot,'double')...
         && isa(theta_m,'double') && isa(theta_m_dot,'double')...
         && isa(theta_m_d,'double'));
     assert(isa(phi_k_1,'double') && isa(theta_r_k_1,'double'));
     assert(all(size(phi_k_1) == [5 1]));
     assert(all(size(theta_r_k_1) == [2 1]));
+    assert(isa(gamma,'double') && isa(Kv,'double') && isa(N,'double') && isa(T,'double')...
+       && isa(xi,'double') && isa(w_n,'double')&& isa(q1,'double')&& isa(q2,'double'));
 %%%%%%%%%% Local variable %%%%%%%%%%
-    gamma = 0.995; % Learning rate coefficient
-    % lon --> cham thich nghi, it gai
-    % nho --> tn nhanh, co the nhieu
-    Kv = 20;
-    N = 10; % Gear ratio
-    T = 0.001; % Sampling period
-    xi = 1; % Damping ratio
-    w_n = 5; % Natural frequency
-    q1 = 3;
-    q2 = 5;
+%     gamma = 0.995; % Learning rate coefficient
+%     % lon --> cham thich nghi, it gai
+%     % nho --> tn nhanh, co the nhieu
+%     Kv = 20;
+%     N = 10; % Gear ratio
+%     T = 0.001; % Sampling period
+%     xi = 1; % Damping ratio
+%     w_n = 5; % Natural frequency
+%     q1 = 3;
+%     q2 = 5;
     p2 = q1/(2*(w_n^2));
     p3 = (2*p2+q2)/(4*xi*w_n);
     p1 = 2*xi*w_n*p2 + (w_n^2)*p3;

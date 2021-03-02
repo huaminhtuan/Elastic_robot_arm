@@ -23,6 +23,9 @@
 /******************************************************************************
  * LOCAL DEFINITION
  *****************************************************************************/
+/*
+ * Encoder configuration
+ */
 #define prevPulse			32767
 #define ENC_PULSE_PER_ROUND	4096
 #define ENC_RAD_PER_PULSE	0.0015339807878856   // (2*M_PI/ENC_PULSE_PER_ROUND)
@@ -46,10 +49,12 @@ static inline void MX_TIM4_Init(void);
  * @param :
  * @return:
  */
-void InitIncrementalEncoder()
+void InitIncrementalEncoder(double initPosition)
 {
 	MX_TIM4_Init();
 	HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);
+	/* Set initial position value */
+	loadPosition = (int64_t)(initPosition/ENC_RAD_PER_PULSE);
 }
 
 /**

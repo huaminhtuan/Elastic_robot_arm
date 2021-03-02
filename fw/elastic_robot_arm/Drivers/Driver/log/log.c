@@ -27,18 +27,21 @@
 /******************************************************************************
  * LOCAL DEFINITION
  *****************************************************************************/
-#define LOG_TX_BUFFER_SIZE 100
-#define LOG_RX_BUFFER_SIZE 100
+#define LOG_TX_BUFFER_SIZE		100
+#define LOG_RX_BUFFER_SIZE		100
+#define LOG_RECEIVED_FRAME_LEN	5
 
 /******************************************************************************
  * LOCAL VARIABLE DECLARATION
  *****************************************************************************/
 UART_HandleTypeDef huart2;
 DMA_HandleTypeDef hdma_usart2_tx;
+DMA_HandleTypeDef hdma_usart2_rx;
 static bool transmitInProgress = false;
+static bool receiveDone = false;
 
 static char LogTxBuffer[LOG_TX_BUFFER_SIZE];
-//static char LogRxBuffer[LOG_RX_BUFFER_SIZE];
+static char LogRxBuffer[LOG_RX_BUFFER_SIZE];
 
 /******************************************************************************
  * LOCAL FUNCTION PROTOTYPE
@@ -55,6 +58,7 @@ static inline void MX_USART2_UART_Init(void);
 void InitLog()
 {
 	MX_USART2_UART_Init();
+	HAL_UART_Receive_DMA(&huart2, (uint8_t *)(LogRxBuffer), LOG_RECEIVED_FRAME_LEN);
 }
 
 /**
@@ -103,6 +107,30 @@ void LogPrint(LOG_MESSAGE_TYPE_t messageType, const char *string,...)
 	transmitInProgress = true;
 }
 
+LOG_RECEIVE_PROGRESS_t LogCheckReceiveDone()
+{
+	if(receiveDone)
+	{
+		receiveDone = false;
+		HAL_UART_Receive_DMA(&huart2, (uint8_t *)(LogRxBuffer), LOG_RECEIVED_FRAME_LEN);
+		return LOG_RECEIVE_PROGRESS_DONE;
+	}
+	else
+	{
+		return LOG_RECEIVE_PROGRESS_WAITING;
+	}
+}
+
+void LogGetReceivedData(char *data)
+{
+	int i = 0;
+	for(i=0; i<LOG_RECEIVED_FRAME_LEN; i++)
+	{
+		*data = LogRxBuffer[i];
+		data++;
+	}
+}
+
 /******************************************************************************
  * LOCAL FUNCTION DEFINITION
  *****************************************************************************/
@@ -113,14 +141,6 @@ void LogPrint(LOG_MESSAGE_TYPE_t messageType, const char *string,...)
  */
 static inline void MX_USART2_UART_Init(void)
 {
-
-	/* USER CODE BEGIN USART2_Init 0 */
-
-	/* USER CODE END USART2_Init 0 */
-
-	/* USER CODE BEGIN USART2_Init 1 */
-
-	/* USER CODE END USART2_Init 1 */
 	huart2.Instance = USART2;
 	huart2.Init.BaudRate = 115200;
 	huart2.Init.WordLength = UART_WORDLENGTH_8B;
@@ -133,16 +153,17 @@ static inline void MX_USART2_UART_Init(void)
 	{
 		Error_Handler();
 	}
-	/* USER CODE BEGIN USART2_Init 2 */
-
-	/* USER CODE END USART2_Init 2 */
-
 }
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
 	UNUSED(huart);
 	transmitInProgress = false;
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	receiveDone = true;
 }
 
 /******************************************************************************

@@ -2,7 +2,7 @@
  * File: _coder_fuzzy_mex.c
  *
  * MATLAB Coder version            : 4.1
- * C/C++ source code generated on  : 01-Nov-2020 21:59:06
+ * C/C++ source code generated on  : 15-Feb-2021 15:10:56
  */
 
 /* Include Files */
@@ -11,7 +11,7 @@
 
 /* Function Declarations */
 static void fuzzy_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T nrhs,
-  const mxArray *prhs[3]);
+  const mxArray *prhs[9]);
 
 /* Function Definitions */
 
@@ -19,11 +19,11 @@ static void fuzzy_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T nrhs,
  * Arguments    : int32_T nlhs
  *                mxArray *plhs[1]
  *                int32_T nrhs
- *                const mxArray *prhs[3]
+ *                const mxArray *prhs[9]
  * Return Type  : void
  */
 static void fuzzy_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T nrhs,
-  const mxArray *prhs[3])
+  const mxArray *prhs[9])
 {
   const mxArray *outputs[1];
   emlrtStack st = { NULL,              /* site */
@@ -34,8 +34,8 @@ static void fuzzy_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T nrhs,
   st.tls = emlrtRootTLSGlobal;
 
   /* Check for proper number of arguments. */
-  if (nrhs != 3) {
-    emlrtErrMsgIdAndTxt(&st, "EMLRT:runTime:WrongNumberOfInputs", 5, 12, 3, 4, 5,
+  if (nrhs != 9) {
+    emlrtErrMsgIdAndTxt(&st, "EMLRT:runTime:WrongNumberOfInputs", 5, 12, 9, 4, 5,
                         "fuzzy");
   }
 

@@ -2,7 +2,7 @@
 ## Makefile generated for MATLAB file/project 'fuzzy'. 
 ## 
 ## Makefile     : fuzzy_rtw.mk
-## Generated on : Sun Nov 01 21:59:13 2020
+## Generated on : Mon Feb 15 15:10:58 2021
 ## MATLAB Coder version: 4.1 (R2018b)
 ## 
 ## Build Info:

@@ -35,7 +35,7 @@
 /******************************************************************************
  * PUBLIC FUNCTION PROTOTYPE
  *****************************************************************************/
-void InitMotorController();
+void InitMotorController(double initPosition);
 void MotorSetDutyCycle(float dutyCycle);
 void MotorReadEncoder(double *position, double *velocity, double samplingTime);
 

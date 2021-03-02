@@ -2,7 +2,7 @@
  * File: main.c
  *
  * MATLAB Coder version            : 4.1
- * C/C++ source code generated on  : 01-Nov-2020 21:59:06
+ * C/C++ source code generated on  : 15-Feb-2021 15:10:56
  */
 
 /*************************************************************************/
@@ -61,7 +61,9 @@ static void main_fuzzy(void)
 
   /* Initialize function 'fuzzy' input arguments. */
   /* Call the entry-point 'fuzzy'. */
-  theta_d = fuzzy(argInit_real_T(), argInit_real_T(), argInit_real_T());
+  theta_d = fuzzy(argInit_real_T(), argInit_real_T(), argInit_real_T(),
+                  argInit_real_T(), argInit_real_T(), argInit_real_T(),
+                  argInit_real_T(), argInit_real_T(), argInit_real_T());
 }
 
 /*

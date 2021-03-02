@@ -2,7 +2,7 @@
  * File: _coder_fuzzy_api.c
  *
  * MATLAB Coder version            : 4.1
- * C/C++ source code generated on  : 01-Nov-2020 21:59:06
+ * C/C++ source code generated on  : 15-Feb-2021 15:10:56
  */
 
 /* Include Files */
@@ -100,17 +100,23 @@ static const mxArray *emlrt_marshallOut(const real_T u)
 }
 
 /*
- * Arguments    : const mxArray * const prhs[3]
+ * Arguments    : const mxArray * const prhs[9]
  *                int32_T nlhs
  *                const mxArray *plhs[1]
  * Return Type  : void
  */
-void fuzzy_api(const mxArray * const prhs[3], int32_T nlhs, const mxArray *plhs
+void fuzzy_api(const mxArray * const prhs[9], int32_T nlhs, const mxArray *plhs
                [1])
 {
   real_T e_l_k;
   real_T e_l_k_1;
   real_T theta_d_k_1;
+  real_T Kp;
+  real_T Kd;
+  real_T Ku;
+  real_T T;
+  real_T theta_d_upper_limit;
+  real_T theta_d_lower_limit;
   emlrtStack st = { NULL,              /* site */
     NULL,                              /* tls */
     NULL                               /* prev */
@@ -123,9 +129,18 @@ void fuzzy_api(const mxArray * const prhs[3], int32_T nlhs, const mxArray *plhs
   e_l_k = emlrt_marshallIn(&st, emlrtAliasP(prhs[0]), "e_l_k");
   e_l_k_1 = emlrt_marshallIn(&st, emlrtAliasP(prhs[1]), "e_l_k_1");
   theta_d_k_1 = emlrt_marshallIn(&st, emlrtAliasP(prhs[2]), "theta_d_k_1");
+  Kp = emlrt_marshallIn(&st, emlrtAliasP(prhs[3]), "Kp");
+  Kd = emlrt_marshallIn(&st, emlrtAliasP(prhs[4]), "Kd");
+  Ku = emlrt_marshallIn(&st, emlrtAliasP(prhs[5]), "Ku");
+  T = emlrt_marshallIn(&st, emlrtAliasP(prhs[6]), "T");
+  theta_d_upper_limit = emlrt_marshallIn(&st, emlrtAliasP(prhs[7]),
+    "theta_d_upper_limit");
+  theta_d_lower_limit = emlrt_marshallIn(&st, emlrtAliasP(prhs[8]),
+    "theta_d_lower_limit");
 
   /* Invoke the target function */
-  e_l_k = fuzzy(e_l_k, e_l_k_1, theta_d_k_1);
+  e_l_k = fuzzy(e_l_k, e_l_k_1, theta_d_k_1, Kp, Kd, Ku, T, theta_d_upper_limit,
+                theta_d_lower_limit);
 
   /* Marshall function outputs */
   plhs[0] = emlrt_marshallOut(e_l_k);

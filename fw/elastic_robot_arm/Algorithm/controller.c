@@ -31,7 +31,9 @@
 /******************************************************************************
  * LOCAL DEFINITION
  *****************************************************************************/
-#define MAX_MOTOR_CONTROL_VOLTAGE	12 /* Volt */
+#define MAX_MOTOR_CONTROL_VOLTAGE		12 /* Volt */
+#define LOW_PASS_FILTER_TIME_CONSTANT	0.5
+#define CONTROLLER_MAX_DEVIATION		0.523599 /* Radian. approximate 30 degrees */
 
 /******************************************************************************
  * LOCAL VARIABLE DECLARATION
@@ -61,6 +63,9 @@ void InitController()
  */
 void ControllerRun(double loadDesiredAngle)
 {
+	/* Local variables */
+	double controlVoltage = 0;
+
 	/* Read motor current angle */
 	double motorAngle;
 	double motorVelocity;
@@ -70,14 +75,28 @@ void ControllerRun(double loadDesiredAngle)
 	double loadAngle;
 	double loadVelocity;
 	IncrementalEncoderReadEncoder(&loadAngle, &loadVelocity, CONTROLLER_SAMPLING_TIME_SEC);
-//	uint16_t loadAngle;
-//	AbsoluteEncoderTriggerReadEncoder();
-//	while(AbsoluteEncoderGetReadStatus() != RD_POS_DATA_BUFFER_READY);
-//	AbsoluteEncoderReadDataBuffer(&loadAngle);
+
+	/* Calculate the deviation between motor and load angles. If the absolute value of the deviation is
+	 * larger than a specific value, it means that there is collision. Then stop the controller */
+	double angleDeviation = loadAngle - motorAngle/4;
+	if ((angleDeviation>CONTROLLER_MAX_DEVIATION) || (angleDeviation<-CONTROLLER_MAX_DEVIATION))
+	{
+		MotorSetDirection(MOTOR_DIR_POSITIVE);
+		MotorSetDutyCycle(0);
+		goto print;
+	}
+
+	/* Low-pass filter */
+//	double loadDesiredAngleAfterFiltered;
+//	static double prevLoadDesiredAngleAfterFiltered = 0;
+//	loadDesiredAngleAfterFiltered = (CONTROLLER_SAMPLING_TIME_SEC*loadDesiredAngle+LOW_PASS_FILTER_TIME_CONSTANT*prevLoadDesiredAngleAfterFiltered)/
+//			(CONTROLLER_SAMPLING_TIME_SEC+LOW_PASS_FILTER_TIME_CONSTANT);
+//	prevLoadDesiredAngleAfterFiltered = loadDesiredAngleAfterFiltered;
 
 	/* Fuzzy PI controller */
 	double currMotorDesiredAngle;
 	static double prevMotorDesiredAngle = 0;
+//	double currLoadError = loadDesiredAngleAfterFiltered - loadAngle;
 	double currLoadError = loadDesiredAngle - loadAngle;
 	static double prevLoadError = 0;
 	currMotorDesiredAngle = Fuzzy(currLoadError, prevLoadError, prevMotorDesiredAngle);
@@ -85,7 +104,6 @@ void ControllerRun(double loadDesiredAngle)
 	prevMotorDesiredAngle = currMotorDesiredAngle;
 
 	/* Model reference adaptive controller */
-	double controlVoltage;
 	static double prevParameter[5] = {2.760782, 1.057416, 2.764187, 1.221422, 0.998208};
 	static double prevReferenceModel[2] = {0,0};
 	double currParameter[5];
@@ -107,11 +125,6 @@ void ControllerRun(double loadDesiredAngle)
 		controlVoltage = -MAX_MOTOR_CONTROL_VOLTAGE;
 
 	static uint32_t timeStamp = 0;
-	LogPrint(LOG_DEBUG, "%d\t%f\t%f\t%f\n", timeStamp, loadAngle, motorAngle, controlVoltage);
-//	LogPrint(LOG_DEBUG, "%d\t%f\t%f\t%f\n", timeStamp, currReferenceModel[0], motorAngle, controlVoltage);
-//	LogPrint(LOG_DEBUG, "%d\t%f\t%f\t%f\t%f\t%f\n", timeStamp, currParameter[0], currParameter[1],
-//			currParameter[2], currParameter[3], currParameter[4]);
-	timeStamp++;
 
 	/* Set control voltage */
 	if(controlVoltage < 0)
@@ -126,7 +139,9 @@ void ControllerRun(double loadDesiredAngle)
 	float dutyCycle = (float)(controlVoltage/MAX_MOTOR_CONTROL_VOLTAGE);
 	MotorSetDutyCycle(dutyCycle);
 
-
+print:
+	LogPrint(LOG_DEBUG, "%d\t%f\t%f\t%f\t%f\n", timeStamp, loadAngle, motorAngle, controlVoltage, currMotorDesiredAngle);
+	timeStamp++;
 }
 
 /******************************************************************************

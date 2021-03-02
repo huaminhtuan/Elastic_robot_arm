@@ -2,7 +2,7 @@
  * File: fuzzy.c
  *
  * MATLAB Coder version            : 4.1
- * C/C++ source code generated on  : 01-Nov-2020 21:59:06
+ * C/C++ source code generated on  : 15-Feb-2021 15:10:56
  */
 
 /* Include Files */
@@ -17,9 +17,17 @@
  * Arguments    : double e_l_k
  *                double e_l_k_1
  *                double theta_d_k_1
+ *                double Kp
+ *                double Kd
+ *                double Ku
+ *                double T
+ *                double theta_d_upper_limit
+ *                double theta_d_lower_limit
  * Return Type  : double
  */
-double fuzzy(double e_l_k, double e_l_k_1, double theta_d_k_1)
+double fuzzy(double e_l_k, double e_l_k_1, double theta_d_k_1, double Kp, double
+             Kd, double Ku, double T, double theta_d_upper_limit, double
+             theta_d_lower_limit)
 {
   double theta_d;
   double e;
@@ -27,18 +35,14 @@ double fuzzy(double e_l_k, double e_l_k_1, double theta_d_k_1)
   int idx;
   double fuzzy_e[5];
   double fuzzy_de[5];
-  static const double dv0[4] = { -2.8, -1.2, -0.4, -0.2 };
+  static const double dv0[4] = { -2.8, -1.2, -0.2, -0.1 };
 
   double dv1[3];
-  static const double dv2[4] = { -2.8, -1.2, -0.3, -0.1 };
+  static const double dv2[4] = { -2.8, -1.2, -0.4, -0.2 };
 
-  static const double dv3[3] = { -0.3, -0.1, 0.0 };
+  static const double dv3[4] = { 0.1, 0.2, 1.2, 2.8 };
 
-  static const double dv4[3] = { 0.0, 0.1, 0.3 };
-
-  static const double dv5[4] = { 0.1, 0.3, 1.2, 2.8 };
-
-  static const double dv6[4] = { 0.2, 0.4, 1.2, 2.8 };
+  static const double dv4[4] = { 0.2, 0.4, 1.2, 2.8 };
 
   int j;
   double varargin_1[6];
@@ -60,10 +64,16 @@ double fuzzy(double e_l_k, double e_l_k_1, double theta_d_k_1)
   /*  Output theta_m_d: Desired motor position */
   /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
   /* %%%%%%%%% Local variable %%%%%%%%%% */
+  /*      Kp = 5; */
+  /*      Kd = 0.1; */
+  /*      Ku = 1; */
+  /*      T = 0.001; */
+  /*      theta_d_upper_limit = pi; */
+  /*      theta_d_lower_limit = -pi; */
   /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
   /* %%%%%%%% Preprocessing %%%%%%%%% */
-  e = 5.0 * e_l_k;
-  de = 0.1 * (e_l_k - e_l_k_1) / 0.001;
+  e = Kp * e_l_k;
+  de = Kd * (e_l_k - e_l_k_1) / T;
 
   /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
   /* %%%%%%%% Fuzzification %%%%%%%%% */
@@ -96,25 +106,25 @@ double fuzzy(double e_l_k, double e_l_k_1, double theta_d_k_1)
     fuzzy_e[0] = trapmf(e, dv0);
 
     /*  NB */
-    dv1[0] = -0.4;
-    dv1[1] = -0.2;
+    dv1[0] = -0.2;
+    dv1[1] = -0.1;
     dv1[2] = 0.0;
     fuzzy_e[1] = trimf(e, dv1);
 
     /*  NS */
-    dv1[0] = -0.2;
+    dv1[0] = -0.1;
     dv1[1] = 0.0;
-    dv1[2] = 0.2;
+    dv1[2] = 0.1;
     fuzzy_e[2] = trimf(e, dv1);
 
     /*  ZE */
     dv1[0] = 0.0;
-    dv1[1] = 0.2;
-    dv1[2] = 0.4;
+    dv1[1] = 0.1;
+    dv1[2] = 0.2;
     fuzzy_e[3] = trimf(e, dv1);
 
     /*  PS */
-    fuzzy_e[4] = trapmf(e, dv6);
+    fuzzy_e[4] = trapmf(e, dv3);
 
     /*  PB */
   }
@@ -131,19 +141,25 @@ double fuzzy(double e_l_k, double e_l_k_1, double theta_d_k_1)
     fuzzy_de[0] = trapmf(de, dv2);
 
     /*  NB */
-    fuzzy_de[1] = trimf(de, dv3);
+    dv1[0] = -0.4;
+    dv1[1] = -0.2;
+    dv1[2] = 0.0;
+    fuzzy_de[1] = trimf(de, dv1);
 
     /*  NS */
-    dv1[0] = -0.1;
+    dv1[0] = -0.2;
     dv1[1] = 0.0;
-    dv1[2] = 0.1;
+    dv1[2] = 0.2;
     fuzzy_de[2] = trimf(de, dv1);
 
     /*  ZE */
-    fuzzy_de[3] = trimf(de, dv4);
+    dv1[0] = 0.0;
+    dv1[1] = 0.2;
+    dv1[2] = 0.4;
+    fuzzy_de[3] = trimf(de, dv1);
 
     /*  PS */
-    fuzzy_de[4] = trapmf(de, dv5);
+    fuzzy_de[4] = trapmf(de, dv4);
 
     /*  PB */
   }
@@ -353,14 +369,14 @@ double fuzzy(double e_l_k, double e_l_k_1, double theta_d_k_1)
   /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
   /* %%%%%%%% Postprocessing %%%%%%%%% */
   theta_d = ((((de + u_PS * 0.3) + u_ZE * 0.0) + u_NS * -0.3) + -u_NB) / ((((de
-    + u_PS) + u_ZE) + u_NS) + u_NB) * 0.001 + theta_d_k_1;
+    + u_PS) + u_ZE) + u_NS) + u_NB) * Ku * T + theta_d_k_1;
 
   /*  Saturation */
-  if (theta_d > 3.1415926535897931) {
-    theta_d = 3.1415926535897931;
+  if (theta_d > theta_d_upper_limit) {
+    theta_d = theta_d_upper_limit;
   } else {
-    if (theta_d < -3.1415926535897931) {
-      theta_d = -3.1415926535897931;
+    if (theta_d < theta_d_lower_limit) {
+      theta_d = theta_d_lower_limit;
     }
   }
 

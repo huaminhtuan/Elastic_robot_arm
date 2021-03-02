@@ -26,6 +26,10 @@
 #define Kv		1
 #define N		4
 #define T		0.01
+#define xi		1 // Damping ratio
+#define w_n		1.4 // Natural frequency
+#define q1		1
+#define q2		1
 /******************************************************************************
  * LOCAL VARIABLE DECLARATION
  *****************************************************************************/
@@ -43,14 +47,17 @@
  * @return:
  */
 void MRAC(double theta_l, double theta_l_dot, double theta_m, double theta_m_dot,
-		double theta_m_d, double phi_k_1[5], double theta_r_k_1[2],
-		double *V_control, double phi_k[5], double theta_r[2])
+          double theta_m_d, double phi_k_1[5], double theta_r_k_1[2],
+          double *V_control, double phi_k[5], double theta_r[2])
 {
+	double p2_tmp;
+	double p2;
+	double p3;
 	double theta_idx_1;
 	double theta[5];
 	int i0;
 	double c_gamma[10];
-	double theta_idx_0;
+	double dv0[4];
 	double d_gamma[10];
 	double d0;
 
@@ -65,22 +72,32 @@ void MRAC(double theta_l, double theta_l_dot, double theta_m, double theta_m_dot
 	/*  Input theta_r_k_1 : Prior reference model state variables */
 	/*  Output tau_m   : Control torque */
 	/*  Output phi_k   : Current estimated system parameters */
-	/*  Output theta_r : Current reference model state variables */
+	/*  Output theta_r : Current reference model  state variables */
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
-	/*  function [V_control, phi_k, theta_r]  = MRAC(theta_l, theta_l_dot, theta_m, theta_m_dot,...  */
-	/*                        theta_m_d, phi_k_1, theta_r_k_1) */
-	/* %%%%%%%% Local variable %%%%%%%%% */
-	/*      gamma = 1; % Learning rate coefficient */
-	/*      Kv = 12; */
+	/* %%%%%%%%% Local variable %%%%%%%%%% */
+	/*      gamma = 0.995; % Learning rate coefficient */
+	/*      % lon --> cham thich nghi, it gai */
+	/*      % nho --> tn nhanh, co the nhieu */
+	/*      Kv = 20; */
 	/*      N = 10; % Gear ratio */
 	/*      T = 0.001; % Sampling period */
-	/*  Damping ratio */
-	/*  Natural frequency */
+	/*      xi = 1; % Damping ratio */
+	/*      w_n = 5; % Natural frequency */
+	/*      q1 = 3; */
+	/*      q2 = 5; */
+	p2_tmp = w_n * w_n;
+	p2 = q1 / (2.0 * p2_tmp);
+	p3 = (2.0 * p2 + q2) / (4.0 * xi * w_n);
+
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
 	/* %%%%%%%% Reference Model %%%%%%%%% */
 	/*  -T*(w_n^2) */
 	/*  1-2*T*xi*w_n */
 	/*  T*(w_n^2) */
+	theta_r[0] = (theta_r_k_1[0] + T * theta_r_k_1[1]) + 0.0 * theta_m_d;
+	theta_r[1] = (-T * p2_tmp * theta_r_k_1[0] + (1.0 - 2.0 * T * xi * w_n) *
+			theta_r_k_1[1]) + T * p2_tmp * theta_m_d;
+
 	/*  Reference model */
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
 	/* %%%%%%%% Adaption Law %%%%%%%%% */
@@ -89,11 +106,8 @@ void MRAC(double theta_l, double theta_l_dot, double theta_m, double theta_m_dot
 	/*  Regressor */
 	/*  Derivative of parameters calculated from parameter */
 	/*  adaption law */
-	theta_idx_1 = 1.9599999999999997 / phi_k_1[2];
-	theta_r[0] = (theta_r_k_1[0] + T * theta_r_k_1[1]) + 0.0 * theta_m_d;
+	theta_idx_1 = p2_tmp / phi_k_1[2];
 	theta[0] = -theta_m;
-	theta_r[1] = (-0.00196 * theta_r_k_1[0] + 0.9972 * theta_r_k_1[1]) + 0.00196 *
-			theta_m_d;
 	theta[1] = -theta_m_dot;
 	theta[2] = theta_m_d;
 	theta[3] = -1.0 / N * theta_l;
@@ -107,19 +121,20 @@ void MRAC(double theta_l, double theta_l_dot, double theta_m, double theta_m_dot
 		c_gamma[i0] *= -gamma;
 	}
 
+	dv0[0] = 2.0 * xi * w_n * p2 + p2_tmp * p3;
 	for (i0 = 0; i0 < 5; i0++) {
 		d_gamma[i0] = 0.0;
 		d0 = c_gamma[i0 + 5];
-		d_gamma[i0] = c_gamma[i0] * 1.26 + d0 * 0.26;
+		d_gamma[i0] = c_gamma[i0] * dv0[0] + d0 * p2;
 		d_gamma[i0 + 5] = 0.0;
-		d_gamma[i0 + 5] = c_gamma[i0] * 0.26 + d0 * 0.27;
+		d_gamma[i0 + 5] = c_gamma[i0] * p2 + d0 * p3;
 	}
 
-	theta_idx_0 = theta_m - theta_r[0];
+	p2_tmp = theta_m - theta_r[0];
 	theta_idx_1 = theta_m_dot - theta_r[1];
 	for (i0 = 0; i0 < 5; i0++) {
 		phi_k[i0] = 0.0;
-		d0 = d_gamma[i0] * theta_idx_0 + d_gamma[i0 + 5] * theta_idx_1;
+		d0 = d_gamma[i0] * p2_tmp + d_gamma[i0 + 5] * theta_idx_1;
 		phi_k[i0] = d0;
 		phi_k[i0] = phi_k_1[i0] + T * d0;
 	}

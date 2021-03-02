@@ -25,12 +25,12 @@
 /******************************************************************************
  * LOCAL DEFINITION
  *****************************************************************************/
-#define Kp						1
-#define Kd						1.8
-#define Ku						1
+#define Kp						0.872665
+#define Kd						0.954930
+#define Ku						3.141593
 #define T						0.01
-#define theta_m_d_upper_limit	M_PI
-#define theta_m_d_lower_limit	-M_PI
+//#define theta_m_d_upper_limit	M_PI
+//#define theta_m_d_lower_limit	-M_PI
 
 /******************************************************************************
  * LOCAL VARIABLE DECLARATION
@@ -50,31 +50,27 @@ double trimf(double x, const double params[3]);
  * @param :
  * @return:
  */
-double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
+double Fuzzy(double e_l_k, double e_l_k_1, double theta_d_k_1)
 {
-	double theta_m_d;
+	double theta_d;
 	double e;
 	double de;
 	int idx;
 	double fuzzy_e[5];
 	double fuzzy_de[5];
-	static const double dv0[4] = { -2.8, -1.2, -0.4, -0.2 };
+	static const double dv0[4] = { -2.8, -1.2, -0.2, -0.1 };
 
 	double dv1[3];
-	static const double dv2[4] = { -2.8, -1.2, -0.3, -0.1 };
+	static const double dv2[4] = { -2.8, -1.2, -0.4, -0.2 };
 
-	static const double dv3[3] = { -0.3, -0.1, 0.0 };
+	static const double dv3[4] = { 0.1, 0.2, 1.2, 2.8 };
 
-	static const double dv4[3] = { 0.0, 0.1, 0.3 };
-
-	static const double dv5[4] = { 0.1, 0.3, 1.2, 2.8 };
-
-	static const double dv6[4] = { 0.2, 0.4, 1.2, 2.8 };
+	static const double dv4[4] = { 0.2, 0.4, 1.2, 2.8 };
 
 	int j;
 	double varargin_1[6];
 	double rules[25];
-	bool exitg1;
+	boolean_T exitg1;
 	double b_varargin_1[4];
 	double u_PS;
 	double u_ZE;
@@ -90,13 +86,13 @@ double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
 	/*  Input theta_m_d_k_1: Prior desired motor angular position */
 	/*  Output theta_m_d: Desired motor position */
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
-	/* %%%%%%%% Local variable %%%%%%%%% */
-	/*      Kp = 1; */
-	/*      Kd = 1; */
+	/* %%%%%%%%% Local variable %%%%%%%%%% */
+	/*      Kp = 5; */
+	/*      Kd = 0.1; */
 	/*      Ku = 1; */
 	/*      T = 0.001; */
-	/*      theta_m_d_upper_limit = pi; */
-	/*      theta_m_d_lower_limit = -pi; */
+	/*      theta_d_upper_limit = pi; */
+	/*      theta_d_lower_limit = -pi; */
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
 	/* %%%%%%%% Preprocessing %%%%%%%%% */
 	e = Kp * e_l_k;
@@ -133,25 +129,25 @@ double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
 		fuzzy_e[0] = trapmf(e, dv0);
 
 		/*  NB */
-		dv1[0] = -0.4;
-		dv1[1] = -0.2;
+		dv1[0] = -0.2;
+		dv1[1] = -0.1;
 		dv1[2] = 0.0;
 		fuzzy_e[1] = trimf(e, dv1);
 
 		/*  NS */
-		dv1[0] = -0.2;
+		dv1[0] = -0.1;
 		dv1[1] = 0.0;
-		dv1[2] = 0.2;
+		dv1[2] = 0.1;
 		fuzzy_e[2] = trimf(e, dv1);
 
 		/*  ZE */
 		dv1[0] = 0.0;
-		dv1[1] = 0.2;
-		dv1[2] = 0.4;
+		dv1[1] = 0.1;
+		dv1[2] = 0.2;
 		fuzzy_e[3] = trimf(e, dv1);
 
 		/*  PS */
-		fuzzy_e[4] = trapmf(e, dv6);
+		fuzzy_e[4] = trapmf(e, dv3);
 
 		/*  PB */
 	}
@@ -168,19 +164,25 @@ double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
 		fuzzy_de[0] = trapmf(de, dv2);
 
 		/*  NB */
-		fuzzy_de[1] = trimf(de, dv3);
+		dv1[0] = -0.4;
+		dv1[1] = -0.2;
+		dv1[2] = 0.0;
+		fuzzy_de[1] = trimf(de, dv1);
 
 		/*  NS */
-		dv1[0] = -0.1;
+		dv1[0] = -0.2;
 		dv1[1] = 0.0;
-		dv1[2] = 0.1;
+		dv1[2] = 0.2;
 		fuzzy_de[2] = trimf(de, dv1);
 
 		/*  ZE */
-		fuzzy_de[3] = trimf(de, dv4);
+		dv1[0] = 0.0;
+		dv1[1] = 0.2;
+		dv1[2] = 0.4;
+		fuzzy_de[3] = trimf(de, dv1);
 
 		/*  PS */
-		fuzzy_de[4] = trapmf(de, dv5);
+		fuzzy_de[4] = trapmf(de, dv4);
 
 		/*  PB */
 	}
@@ -192,15 +194,15 @@ double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
 	/*  | \e|    |    |    |    |    | */
 	/*  |de\| NB | NS | ZE | PS | PB | */
 	/*  |----------------------------- */
-	/*  |	NB| PB | PB | PB | PS | ZE | */
+	/*  |	NB| NB | NB | NB | NS | ZE | */
 	/*  |----------------------------- */
-	/*  | NS| PB | PB | PS | ZE | NS | */
+	/*  | NS| NB | NB | NS | ZE | PS | */
 	/*  |----------------------------- */
-	/*  | ZE| PB | PS | ZE | NS | NB | */
+	/*  | ZE| NB | NS | ZE | PS | PB | */
 	/*  |----------------------------- */
-	/*  | PS| PS | ZE | NS | NB | NB | */
+	/*  | PS| NS | ZE | PS | PB | PB | */
 	/*  |----------------------------- */
-	/*  | PB| ZE | NS | NB | NB | NB | */
+	/*  | PB| ZE | PS | PB | PB | PB | */
 	/*  ------------------------------ */
 	/*  MAX-PROD aggregation rules */
 	/* %% */
@@ -389,21 +391,22 @@ double Fuzzy(double e_l_k, double e_l_k_1, double theta_m_d_k_1)
 	/* %% */
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
 	/* %%%%%%%% Postprocessing %%%%%%%%% */
-	theta_m_d = (((((de + u_PS * 0.3) + u_ZE * 0.0) + u_NS * -0.3) + -u_NB) /
-			((((de + u_PS) + u_ZE) + u_NS) + u_NB) * T + theta_m_d_k_1) * Ku;
+	theta_d = ((((de + u_PS * 0.3) + u_ZE * 0.0) + u_NS * -0.3) + -u_NB) / ((((de
+			+ u_PS) + u_ZE) + u_NS) + u_NB) * Ku * T + theta_d_k_1;
 
 	/*  Saturation */
-//	if (theta_m_d > theta_m_d_upper_limit) {
-//		theta_m_d = theta_m_d_upper_limit;
-//	} else {
-//		if (theta_m_d < theta_m_d_lower_limit) {
-//			theta_m_d = theta_m_d_lower_limit;
-//		}
-//	}
+	//  if (theta_d > theta_d_upper_limit) {
+	//    theta_d = theta_d_upper_limit;
+	//  } else {
+	//    if (theta_d < theta_d_lower_limit) {
+	//      theta_d = theta_d_lower_limit;
+	//    }
+	//  }
 
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
-	return theta_m_d;
+	return theta_d;
 }
+
 /******************************************************************************
  * LOCAL FUNCTION DEFINITION
  *****************************************************************************/

@@ -7,16 +7,18 @@
 % Input theta_m_d_k_1: Prior desired motor angular position
 % Output theta_m_d: Desired motor position
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function theta_d = fuzzy(e_l_k, e_l_k_1, theta_d_k_1)
+function theta_d = fuzzy(e_l_k, e_l_k_1, theta_d_k_1, Kp, Kd, Ku, T, theta_d_upper_limit, theta_d_lower_limit)
     assert(isa(e_l_k,'double') && isa(e_l_k_1,'double')...
         && isa(theta_d_k_1,'double'));
+    assert(isa(Kp,'double') && isa(Kd,'double') && isa(Ku,'double') && isa(T,'double')...
+        && isa(theta_d_upper_limit,'double') && isa(theta_d_lower_limit,'double'));
 %%%%%%%%%% Local variable %%%%%%%%%%
-    Kp = 5;
-    Kd = 0.1;
-    Ku = 1;
-    T = 0.001;
-    theta_d_upper_limit = pi;
-    theta_d_lower_limit = -pi;
+%     Kp = 5;
+%     Kd = 0.1;
+%     Ku = 1;
+%     T = 0.001;
+%     theta_d_upper_limit = pi;
+%     theta_d_lower_limit = -pi;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%% Preprocessing %%%%%%%%%
@@ -42,11 +44,11 @@ function theta_d = fuzzy(e_l_k, e_l_k_1, theta_d_k_1)
 	elseif e > 1
 		fuzzy_e(5) = 1; % PB
 	else
-		fuzzy_e(1) = trapmf(e, [-2.8 -1.2 -0.4 -0.2]); % NB
-		fuzzy_e(2) = trimf(e, [-0.4 -0.2 0]); % NS
-		fuzzy_e(3) = trimf(e, [-0.2 0 0.2]); % ZE
-		fuzzy_e(4) = trimf(e, [0 0.2 0.4]); % PS
-		fuzzy_e(5) = trapmf(e, [0.2 0.4 1.2 2.8]); % PB
+		fuzzy_e(1) = trapmf(e, [-2.8 -1.2 -0.2 -0.1]); % NB
+		fuzzy_e(2) = trimf(e, [-0.2 -0.1 0]); % NS
+		fuzzy_e(3) = trimf(e, [-0.1 0 0.1]); % ZE
+		fuzzy_e(4) = trimf(e, [0 0.1 0.2]); % PS
+		fuzzy_e(5) = trapmf(e, [0.1 0.2 1.2 2.8]); % PB
 	end
 
 	if de < -1
@@ -54,11 +56,11 @@ function theta_d = fuzzy(e_l_k, e_l_k_1, theta_d_k_1)
 	elseif de > 1
 		fuzzy_de(5) = 1; % PB
 	else
-		fuzzy_de(1) = trapmf(de, [-2.8 -1.2 -0.3 -0.1]); % NB
-		fuzzy_de(2) = trimf(de, [-0.3 -0.1 0]); % NS
-		fuzzy_de(3) = trimf(de, [-0.1 0 0.1]); % ZE
-		fuzzy_de(4) = trimf(de, [0 0.1 0.3]); % PS
-		fuzzy_de(5) = trapmf(de, [0.1 0.3 1.2 2.8]); % PB
+		fuzzy_de(1) = trapmf(de, [-2.8 -1.2 -0.4 -0.2]); % NB
+		fuzzy_de(2) = trimf(de, [-0.4 -0.2 0]); % NS
+		fuzzy_de(3) = trimf(de, [-0.2 0 0.2]); % ZE
+		fuzzy_de(4) = trimf(de, [0 0.2 0.4]); % PS
+		fuzzy_de(5) = trapmf(de, [0.2 0.4 1.2 2.8]); % PB
 	end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -105,8 +107,8 @@ function theta_d = fuzzy(e_l_k, e_l_k_1, theta_d_k_1)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%% Postprocessing %%%%%%%%%
+    u = u*Ku;
     theta_d = u*T + theta_d_k_1;
-    theta_d = theta_d*Ku;
     % Saturation
     if theta_d > theta_d_upper_limit
         theta_d = theta_d_upper_limit;
