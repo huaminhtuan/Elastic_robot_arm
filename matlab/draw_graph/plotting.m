@@ -3,7 +3,7 @@ clc
 close all
 
 % get data
-fid = fopen('log_j1_sine_disturb.txt');
+fid = fopen('log_j2_square_normal.txt');
 line = fgetl(fid);
 id = 1;
 
@@ -25,28 +25,48 @@ fclose(fid);
 
 time = 0:0.01:((id-2)*0.01);
 
-ref = 0.5*sin((2*pi/50)*time);
+% ref = 0.5*sin((2*pi/50)*time);
 
-% s = size(time);
-% ref = zeros(1, s(2));
-% k = 0;
-% for i=1:s(2)
-%     if mod(i,2000)==0
-%         k=k+1;
-%         k = mod(k,4);
-%     end
-%     
-%     if k==0
-%         ref(i)=0.5;
-%     elseif k==1
-%         ref(i)=0;
-%     elseif k==2
-%         ref(i)=-0.5;
-%     elseif k==3
-%         ref(i)=0;
-%     end
-% end
+s = size(time);
+ref = zeros(1, s(2));
+k = 0;
+for i=1:s(2)
+    if mod(i,2000)==0
+        k=k+1;
+        k = mod(k,4);
+    end
+    
+    if k==0
+        ref(i)=0.5;
+    elseif k==1
+        ref(i)=0;
+    elseif k==2
+        ref(i)=-0.5;
+    elseif k==3
+        ref(i)=0;
+    end
+end
 
+% plot(time, load_angle, 'r');
+% hold on;
+% plot(time, ref, 'b--');
+% hold on;
+% plot(time, motor_angle, 'black-.');
+% title('angle response');
+% legend('load angle', 'desired load angle', 'motor angle');
+% xlabel('time (s)');
+% ylabel('angle (radian)');
+% grid on;
+% 
+% figure;
+% plot(time, control_voltage, 'r');
+% title('voltage');
+% legend('control voltage');
+% xlabel('time (s)');
+% ylabel('voltage (V)');
+% grid on;
+
+subplot(2,1,1);
 plot(time, load_angle, 'r');
 hold on;
 plot(time, ref, 'b--');
@@ -54,17 +74,14 @@ hold on;
 plot(time, motor_angle, 'black-.');
 title('angle response');
 legend('load angle', 'desired load angle', 'motor angle');
-xlabel('time (s)');
+% xlabel('time (s)');
 ylabel('angle (radian)');
 grid on;
 
-figure;
+subplot(2,1,2);
 plot(time, control_voltage, 'r');
 title('voltage');
 legend('control voltage');
 xlabel('time (s)');
 ylabel('voltage (V)');
 grid on;
-
-
-

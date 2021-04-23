@@ -1,0 +1,8 @@
+fuzzy.obj
+fuzzy_initialize.obj
+fuzzy_terminate.obj
+rtGetInf.obj
+rtGetNaN.obj
+rt_nonfinite.obj
+trapmf1.obj
+trimf1.obj
