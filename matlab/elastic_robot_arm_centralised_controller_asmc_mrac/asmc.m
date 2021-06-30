@@ -25,15 +25,10 @@ function [theta_d, W_k, delta_phi_k] = asmc(e, edot, q, qdot, qddot, qddotdot, W
     Ks = 5;
     T = 0.001;
     U = 150;
-    alpha = 1;
     error_deadzone = 0.174533;
     error_dot_deadzone = 0.523599;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%% Control variable %%%%%%%%%
-    s = edot + Ke*e; % Sliding surface
-    W_k = W_k_1 - 1.1*U*tanh(Ks*s)*T;
-    u = -sqrt(U).*sqrt(abs(s)).*tanh(Ks*s) + W_k; % Control variable
+    A = (1.0e-03)*[0.01 0
+                   0   0.05];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%% Robot arm parameters %%%%%%%
@@ -79,8 +74,7 @@ function [theta_d, W_k, delta_phi_k] = asmc(e, edot, q, qdot, qddot, qddotdot, W
              0  K1];
     M_hat = [Ilzz0 + Ilzz1 + (l1^2*ml1)/4 - (l1^2*ml1*sin(q1)^2)/4  0
              0,                                                     Ilyy1 + (l1^2*ml1)/4 + Ilxx1*sin(q0)^2 - Ilyy1*sin(q0)^2];
-    inv_M_hat_dot = [((l1^2*ml1*sin(q1)*cos(q1)*qdot1)/2)/((Ilzz0 + Ilzz1 + (l1^2*ml1)/4 - (l1^2*ml1*sin(q1)^2)/4)^2)  0
-                 0,                                   (-(Ilxx1- Ilyy1)*2*sin(q0)*cos(q0)*qdot0)/((Ilyy1 + (l1^2*ml1)/4 + Ilxx1*sin(q0)^2 - Ilyy1*sin(q0)^2)^2)];
+
     C_hat = zeros(2,2);
     C_hat(1,1) = -(l1^2*ml1*qdot1*sin(2*q1))/8;
     C_hat(1,2) = -(qdot1*sin(2*q0)*(Ilxx1 - Ilyy1))/2;
@@ -92,6 +86,12 @@ function [theta_d, W_k, delta_phi_k] = asmc(e, edot, q, qdot, qddot, qddotdot, W
     G_hat(2,1) = ml1*g*(l1/2)*cos(q1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%% Control variable %%%%%%%%%
+    s = edot + Ke*e; % Sliding surface
+    W_k = W_k_1 - 1.1*U*tanh(Ks*s)*T;
+    u = -sqrt(U).*sqrt(abs(s)).*tanh(Ks*s) + W_k; % Control variable
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%%%%%%%%%% Adaption Law %%%%%%%%%%%
     if e(1) < error_deadzone && e(2) < error_deadzone...
             && edot(1) < error_dot_deadzone...
@@ -101,7 +101,7 @@ function [theta_d, W_k, delta_phi_k] = asmc(e, edot, q, qdot, qddot, qddotdot, W
         psi = [-(qddotdot + Ke*qddot - u)
            -qdot
            -1];
-        delta_phi_dot = -(inv(K_hat)*M_hat)*alpha*s*psi';
+        delta_phi_dot = -A*s*psi';
     end
     delta_phi_k = delta_phi_k_1 + delta_phi_dot*T;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

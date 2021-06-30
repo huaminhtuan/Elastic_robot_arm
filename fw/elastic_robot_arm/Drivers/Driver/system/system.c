@@ -30,7 +30,11 @@
 /******************************************************************************
  * LOCAL DEFINITION
  *****************************************************************************/
-#define JOINT_2
+#define JOINT_1
+
+#ifdef JOINT_2
+#define JOINT_OFFSET (M_PI_2 - 0.033748)
+#endif
 
 typedef struct
 {
@@ -41,6 +45,7 @@ typedef struct
 typedef enum
 {
 	SYSTEM_STATE_INIT,
+	SYSTEM_STATE_HOMING,
 	SYSTEM_STATE_RUN,
 }SYSTEM_STATE_t;
 
@@ -94,16 +99,6 @@ void InitSystem()
 	/* Configure system timer */
 	InitSystemTimer();
 
-	/* Configure the motor controller's essential peripherals */
-#ifdef JOINT_2
-	InitMotorController(M_PI_2*4);
-#endif
-#ifdef JOINT_1
-	InitMotorController(-M_PI_2*4);
-#endif
-	MotorSetDirection(MOTOR_DIR_POSITIVE);
-	MotorSetDutyCycle(0);
-
 	/* Configure controller */
 	InitController();
 
@@ -115,15 +110,28 @@ void InitSystem()
 	else
 	{
 		LogPrint(LOG_DEBUG, "Current joint position read failed\n");
-		while(1);
+//		while(1);
 	}
-//	InitIncrementalEncoder(currentJointPos);
+
 #ifdef JOINT_2
-	InitIncrementalEncoder(M_PI_2);
+	if(currentJointPos > M_PI_2)
+		currentJointPos -= 2*M_PI;
+	InitIncrementalEncoder(currentJointPos + JOINT_OFFSET);
+//	InitIncrementalEncoder(M_PI_2);
 #endif
 #ifdef JOINT_1
 	InitIncrementalEncoder(-M_PI_2);
 #endif
+
+	/* Configure the motor controller's essential peripherals */
+#ifdef JOINT_2
+	InitMotorController((currentJointPos + JOINT_OFFSET)*4);
+#endif
+#ifdef JOINT_1
+	InitMotorController(-M_PI_2*4);
+#endif
+	MotorSetDirection(MOTOR_DIR_POSITIVE);
+	MotorSetDutyCycle(0);
 
 	/* Configure EEPROM module */
 //	InitEEPROM();
@@ -144,7 +152,7 @@ void InitSystem()
 	systemState = SYSTEM_STATE_INIT;
 }
 
-#define omega 0.12566371f // 2*pi/T, T = 50s
+#define omega 0.78539816f // 2*pi/T, T = 8s
 #define phase 0.0f
 
 //#ifdef JOINT_2
@@ -164,11 +172,20 @@ void SystemStateMachineProcessing()
 	switch (systemState) {
 		case SYSTEM_STATE_INIT:
 			break;
+
+		case SYSTEM_STATE_HOMING:
+#ifdef JOINT_2
+			LogPrint(LOG_DEBUG, "Homing\n");
+    		ControllerRun(M_PI_2);
+#endif
+			break;
+
 		case SYSTEM_STATE_RUN:
 			if(systemFlags.System_Flags_runAlgorithm)
 			{
 				/* Clear flag */
 				systemFlags.System_Flags_runAlgorithm = false;
+//				ControllerRun(-M_PI);
 
 				/* Run controller */
 				// sine wave
@@ -180,13 +197,13 @@ void SystemStateMachineProcessing()
 				// square wave
 //				static double time = 0;
 //				static double loadDesiredAngle = 0.5f;
-//				if((time >= 20.0f) && (time < 40.0f))
+//				if((time >= 8.0f) && (time < 16.0f))
 //					loadDesiredAngle = 0;
-//				else if((time >= 40.0f) && (time < 60.0f))
+//				else if((time >= 16.0f) && (time < 24.0f))
 //					loadDesiredAngle = -0.5f;
-//				else if((time >= 60.0f) && (time < 80.0f))
+//				else if((time >= 24.0f) && (time < 32.0f))
 //					loadDesiredAngle = 0;
-//				else if(time >= 80.0f)
+//				else if(time >= 32.0f)
 //				{
 //					loadDesiredAngle = 0.5f;
 //					time = 0;
@@ -230,18 +247,6 @@ void SystemStateMachineProcessing()
 //				else
 //					counter++;
 #endif
-//				ControllerRun(-M_PI);
-//				ControllerRun(3*M_PI_4);
-
-//				double currentJointPos = 0;
-//				ABS_ENC_READ_STATUS_t absoluteEncoderReadStatus = AbsoluteEncoderReadEncoder(&currentJointPos);
-//				if(absoluteEncoderReadStatus == ABS_ENC_READ_STATUS_OK)
-//					LogPrint(LOG_DEBUG, "Current joint position: %d\n", (uint16_t)(currentJointPos/0.0015339807878856));
-//				else
-//				{
-//					LogPrint(LOG_DEBUG, "Current joint position read failed\n");
-//					while(1);
-//				}
 			}
 
 			if(systemFlags.System_Flags_storeParamters)
@@ -481,7 +486,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     if(GPIO_Pin == GPIO_PIN_13)
     {
     	if(systemState == SYSTEM_STATE_INIT)
+    		systemState = SYSTEM_STATE_HOMING;
+    	else if(systemState == SYSTEM_STATE_HOMING)
+    	{
     		systemState = SYSTEM_STATE_RUN;
+    	}
+//    	if(systemState == SYSTEM_STATE_INIT)
+//    		systemState = SYSTEM_STATE_RUN;
     	else if(systemState == SYSTEM_STATE_RUN)
     	{
     		systemState = SYSTEM_STATE_INIT;

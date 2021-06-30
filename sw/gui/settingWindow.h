@@ -1,25 +1,23 @@
 #ifndef SETTINGWINDOW_H
 #define SETTINGWINDOW_H
 
-#include <QMainWindow>
+#include <QWidget>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class SettingWindow; }
-QT_END_NAMESPACE
+namespace Ui {
+class SettingWindow;
+}
 
-class SettingWindow : public QMainWindow
+class SettingWindow : public QWidget
 {
     Q_OBJECT
 
 public:
-    SettingWindow(QWidget *parent = nullptr);
+    explicit SettingWindow(QWidget *parent = nullptr);
     ~SettingWindow();
-
-private slots:
-    QTimer *timer;
-    void on_btnConnect_clicked();
+    static int curPort;
 
 private:
     Ui::SettingWindow *ui;
 };
-#endif // SETTINGWINDOW_H
+
+#endif // SETTINGWINDOW_H_H

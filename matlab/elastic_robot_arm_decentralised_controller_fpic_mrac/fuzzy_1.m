@@ -7,14 +7,14 @@
 % Input theta_d_k_1  : Prior desired motor angular position
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % function theta_d = fuzzy(e_l_k, e_l_k_1, theta_d_k_1, Kp, Kd, Ku, T, theta_d_upper_limit, theta_d_lower_limit)
-function theta_d = fuzzy(e_l_k, e_l_k_1, theta_d_k_1)
+function theta_d = fuzzy_1(e_l_k, e_l_k_1, theta_d_k_1)
     assert(isa(e_l_k,'double') && isa(e_l_k_1,'double')...
         && isa(theta_d_k_1,'double'));
 %     assert(isa(Kp,'double') && isa(Kd,'double') && isa(Ku,'double') && isa(T,'double')...
 %         && isa(theta_d_upper_limit,'double') && isa(theta_d_lower_limit,'double'));
 %%%%%%%%%% Local variable %%%%%%%%%%
     Kp = 5;
-    Kd = 0.1;
+    Kd = 0.4;
     Ku = 1;
     T = 0.001;
     theta_d_upper_limit = pi;

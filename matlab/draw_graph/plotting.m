@@ -3,7 +3,7 @@ clc
 close all
 
 % get data
-fid = fopen('log_j2_square_normal.txt');
+fid = fopen('log_j2_sine_disturb_8s.txt');
 line = fgetl(fid);
 id = 1;
 
@@ -14,7 +14,7 @@ while ischar(line)
     control_voltage(id) = str2double(data(5));
     
     id = id + 1;
-    if id>40000
+    if id>5000
         break;
     end
     line = fgetl(fid);
@@ -25,13 +25,13 @@ fclose(fid);
 
 time = 0:0.01:((id-2)*0.01);
 
-% ref = 0.5*sin((2*pi/50)*time);
+% ref = 0.5*sin((2*pi/8)*time);
 
 s = size(time);
 ref = zeros(1, s(2));
 k = 0;
 for i=1:s(2)
-    if mod(i,2000)==0
+    if mod(i,800)==0
         k=k+1;
         k = mod(k,4);
     end
@@ -67,6 +67,7 @@ end
 % grid on;
 
 subplot(2,1,1);
+% figure;
 plot(time, load_angle, 'r');
 hold on;
 plot(time, ref, 'b--');
@@ -79,6 +80,7 @@ ylabel('angle (radian)');
 grid on;
 
 subplot(2,1,2);
+% figure;
 plot(time, control_voltage, 'r');
 title('voltage');
 legend('control voltage');
