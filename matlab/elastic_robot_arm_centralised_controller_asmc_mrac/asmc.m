@@ -22,13 +22,13 @@ function [theta_d, W_k, delta_phi_k] = asmc(e, edot, q, qdot, qddot, qddotdot, W
 %%%%%%%%%% Local variable %%%%%%%%%%
     Ke = [1 0
           0 1];
-    Ks = 5;
+    Ksigma = 1;
     T = 0.001;
-    U = 150;
+    U = 100;
     error_deadzone = 0.174533;
     error_dot_deadzone = 0.523599;
-    A = (1.0e-03)*[0.01 0
-                   0   0.05];
+    A = (1.0e-04)*[0.5 0
+                   0   0.5];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%% Robot arm parameters %%%%%%%
@@ -88,8 +88,8 @@ function [theta_d, W_k, delta_phi_k] = asmc(e, edot, q, qdot, qddot, qddotdot, W
 
 %%%%%%%%% Control variable %%%%%%%%%
     s = edot + Ke*e; % Sliding surface
-    W_k = W_k_1 - 1.1*U*tanh(Ks*s)*T;
-    u = -sqrt(U).*sqrt(abs(s)).*tanh(Ks*s) + W_k; % Control variable
+    W_k = W_k_1 - 1.1*U*tanh(Ksigma*s)*T;
+    u = -sqrt(U).*sqrt(abs(s)).*tanh(Ksigma*s) + W_k; % Control variable
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%% Adaption Law %%%%%%%%%%%
